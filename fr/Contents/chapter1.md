@@ -20,7 +20,7 @@ Vous pouvez installer atoum de plusieurs manières:
 
 * [en téléchargeant l'archive PHAR](#archive-phar) ;
 * [en utilisant composer](#composer) ;
-* [en utilisant un script d'installation](#script-d-installation) ;
+* [en utilisant un script d'installation](#script-dinstallation) ;
 * [en clonant le dépôt github](#github) ;
 * [en utilisant un plugin symfony 1](#plugin-symfony-1) ;
 * [en utilisant un bundle symfony 2](#bundle-symfony-2).
