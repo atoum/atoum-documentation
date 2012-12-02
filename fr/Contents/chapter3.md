@@ -449,7 +449,7 @@ Cette option vous permet de filtrer les classes et les méthodes à lancer.
     ./bin/atoum --methods *::testMyMethod
 
 **Note**: reportez-vous à la section sur les
-[filtres par classe ou méthode](#une-classe-ou-une-mthode) pour avoir plus d'informations.
+[filtres par classe ou méthode](#une-classe-ou-une-methode) pour avoir plus d'informations.
 
 ### -mcn <integer> / --max-children-number <integer>
 
@@ -508,7 +508,7 @@ Cette option vous permet de filtrer les classes et les méthodes en fonction des
     ./bin/atoum -ns mageekguy\\atoum\\tests\\units\\asserters
     ./bin/atoum --namespaces mageekguy\\atoum\\tests\\units\\asserters
 
-**Note**: reportez-vous à la section sur les [filtres par espace de noms](#par-espace-de-nom) pour avoir plus
+**Note**: reportez-vous à la section sur les [filtres par espace de noms](#par-espace-de-noms) pour avoir plus
 d'informations.
 
 ### -p <file> / --php <file>

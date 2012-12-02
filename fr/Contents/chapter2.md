@@ -2159,7 +2159,7 @@ automatiquement la totalité de la suite de tests afin de détecter les éventue
 introduite par la ou les corrections effectuées par le développeur.
 
 Bien évidemment, le mode "loop" ne prend en compte que
-[le ou les fichiers de tests unitaires lancés](#fichiers-excuter) par atoum.
+[le ou les fichiers de tests unitaires lancés](#fichiers-a-executer) par atoum.
 
 
 
