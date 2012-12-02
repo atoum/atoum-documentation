@@ -20,6 +20,8 @@ You can install atoum several ways :
 * [Using an install script](#installer)
 * [Cloning github repository](#github)
 * [Using zend framework 2 component](#using-zend-framework-2-component)
+* [Using a symfony 1.4 plugin](#using-the-symfony-14-plugin) ;
+
 
 ### PHAR
 
@@ -80,6 +82,13 @@ github : git://github.com/atoum/atoum.git
 A library is available to use Atoum with zend framework 2. Documentation and exemples are available
 at the following address :
 [https://github.com/blanchonvincent/zend-framework-test-atoum](https://github.com/blanchonvincent/zend-framework-test-atoum).
+
+### Using the symfony 1.4 plugin
+
+A plugin is available to use atoum with symfony 1.
+
+Documentation is available in [the cookbook](#usage-with-symfony-14).
+
 
 ## A quick overview of atoum's philosophy ##
 

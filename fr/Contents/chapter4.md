@@ -467,4 +467,85 @@ Dans tous les cas, voilà ce que vous devriez obtenir:
     ==> Acme\DemoBundle\Entity\Car::setMaxSpeed(): 0.00%
     ==> Acme\DemoBundle\Entity\Car::getMaxSpeed(): 0.00%
     > Running duration: 0.24 second.
-    Success (1 test, 1/1 method, 0 skipped method, 4 assertions) !    
+    Success (1 test, 1/1 method, 0 skipped method, 4 assertions) !
+
+
+## Utilisation avec symfony 1.4
+
+Si vous souhaitez utiliser atoum au sein de vos projets Symfony 1.4, vous pouvez installer le 
+plugin sfAtoumPlugin. Celui-ci est disponible à l'adresse suivante: 
+[https://github.com/atoum/sfAtoumPlugin](https://github.com/atoum/sfAtoumPlugin).
+
+## Installation
+
+Il existe plusieurs méthodes d'installation du plugin dans votre projet : 
+
+* installation via composer
+* installation via des submodules git
+
+### En utilisant composer
+
+Ajouter ceci dans le composer.json :
+
+    [shell]
+    "require"     : {
+      "atoum/sfAtoumPlugin": "*"
+    },
+
+Après avoir effectué un `php composer.phar update`, le plugin devrait se trouver dans le dossier
+plugins et atoum dans un dossier `vendor`.
+
+Il faut ensuite activer le plugin dans le ProjectConfiguration et indiquer le chemin d'atoum.
+
+    [php]
+    sfConfig::set('sf_atoum_path', dirname(__FILE__) . '/../vendor/atoum/atoum');
+
+    if (sfConfig::get('sf_environment') != 'prod')
+    {
+      $this->enablePlugins('sfAtoumPlugin');
+    }
+
+### En utilisant des submodules git
+
+Il faut tout d'abord ajouter atoum en tant que submodule :
+
+    [shell]
+    git submodule add git://github.com/atoum/atoum.git lib/vendor/atoum
+
+Puis ensuite ajouter le sfAtoumPlugin en tant que submodule :
+
+    [shell]
+    git submodule add git://github.com/atoum/sfAtoumPlugin.git plugins/sfAtoumPlugin
+
+Enfin, il faut activer le plugin dans le fichier ProjectConfiguration :
+
+    [php]
+    if (sfConfig::get('sf_environment') != 'prod')
+    {
+      $this->enablePlugins('sfAtoumPlugin');
+    }
+
+
+## Ecrire les tests
+
+Les tests doivent inclure le fichier de bootstrap se trouvant dans le plugin :
+
+    [php]
+    require_once __DIR__ . '/../../../../plugins/sfAtoumPlugin/bootstrap/unit.php';
+
+
+## Lancer les tests
+
+La commande symfony atoum:test est disponible. Les tests peuvent alors se lancer de cette façon :
+
+    [shell]
+    ./symfony atoum:test
+
+Toutes les paramètres d'atoum sont disponibles. 
+
+Il est donc, par exemple, possible de passer un fichier de configuration comme ceci :
+
+    [php]
+    php symfony atoum:test -c config/atoum/hudson.php
+
+

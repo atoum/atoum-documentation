@@ -167,9 +167,10 @@ dépôt github:
 
 Si vous souhaitez utiliser atoum au sein d'un projet symfony 1, un plugin existe et est disponible à
 l'adresse suivante:
-[https://github.com/agallou/sfAtoumPlugin](https://github.com/agallou/sfAtoumPlugin).
+[https://github.com/atoum/sfAtoumPlugin](https://github.com/atoum/sfAtoumPlugin).
 
-Toutes les instructions pour l'installation et l'utilisation d'atoum sont expliquées sur cette page.
+Toutes les instructions pour l'installation et d'utilisation se
+trouvent [dans le cookbook](#utilisation-avec-symfony-14) ainsi que sur la page du projet.
 
 
 ### Bundle symfony 2
