@@ -1768,10 +1768,13 @@ never vérifie que la méthode testée (voir [call](#call)) du mock testé n'a j
 
 **Note**: once est équivalent à [exactly](#exactly)(0).
 
-##### once
+##### once/twice/thrice
 
-once vérifie que la méthode testée (voir [call](#call)) du mock testé a été appelée exactement une
-fois.
+Ces assertions vérifient que la méthode testée (voir [call](#call)) du mock testé a été appelée exactement :
+
+* une fois (once)
+* deux fois (twice)
+* trois fois (thrice)
 
     [php]
     $mock = new \mock\MyFirstClass;
@@ -1782,9 +1785,13 @@ fois.
         ->mock($mock)
             ->call('myMethod')
                 ->once()
+            ->call('mySecondMethod')
+                ->twice()
+            ->call('myThirdMethod')
+                ->thrice()
     ;
 
-**Note**: once est équivalent à [exactly](#exactly)(1).
+**Note**: once, twice et thrice sont équivalents à un appel à [exactly](#exactly) auquel on passe le nombre d'appels attendu.
 
 ##### withArguments
 
