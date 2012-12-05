@@ -177,7 +177,7 @@ trouvent [dans le cookbook](#utilisation-avec-symfony-14) ainsi que sur la page 
 
 Si vous souhaitez utiliser atoum au sein d'un projet symfony 2, un bundle existe et est disponible à
 l'adresse suivante:
-[https://github.com/FlorianLB/JediAtoumBundle](https://github.com/FlorianLB/JediAtoumBundle).
+[https://github.com/atoum/AtoumBundle](https://github.com/atoum/AtoumBundle).
 
 Toutes les instructions pour l'installation et l'utilisation d'atoum sont expliquées sur cette page.
 
