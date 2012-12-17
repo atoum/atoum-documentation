@@ -305,7 +305,7 @@ caractères, un nombre entier, etc...);
 
 ## Intégration d'atoum dans votre IDE
 
-## Sublime Text 2
+### Sublime Text 2
 
 Un [plug-in pour SublimeText 2](https://github.com/toin0u/Sublime-atoum) permet l'exécution des
 tests unitaires par atoum et la visualisation du résultat sans quitter l'éditeur.
@@ -313,7 +313,7 @@ tests unitaires par atoum et la visualisation du résultat sans quitter l'édite
 Les informations nécessaires à son installation et à sa configuration sont disponibles
 [via le blog de son auteur](http://sbin.dk/2012/05/19/atoum-sublime-text-2-plugin/).
 
-## VIM
+### VIM
 
 atoum est livré avec un plug-in facilitant son utilisation dans l'éditeur VIM.
 
@@ -324,7 +324,7 @@ Il est alors possible de naviguer parmi les éventuelles erreurs,
 voir de se rendre à la ligne correspondant à une assertion ne passant pas à l'aide d'une simple
 combinaison de touches.
 
-### Installation du plug-in atoum pour VIM
+#### Installation du plug-in atoum pour VIM
 
 Si vous n'utilisez pas atoum sous la forme d'une archive PHAR, vous trouverez le fichier
 correspondant au plug-in, nommé atoum.vba, dans le répertoire ressources/vim.
@@ -348,7 +348,7 @@ Il n'y a plus ensuite qu'à demander à VIM l'installation du plug-in à l'aide 
     [vim]
     :source %
 
-### Utilisation du plug-in atoum pour VIM
+#### Utilisation du plug-in atoum pour VIM
 
 Pour utiliser le plug-in, atoum doit évidemment être installé
 et vous devez être en train d'éditer un fichier contenant une classe de tests unitaires basée sur
@@ -371,7 +371,7 @@ en ajoutant par exemple la ligne suivante dans votre fichier .vimrc:
 
 L'utilisation de la touche F12 de votre clavier en mode normal appellera alors la commande :Atoum.
 
-### Gestion des fichiers de configuration de atoum
+#### Gestion des fichiers de configuration de atoum
 
 Vous pouvez indiquer un autre fichier de configuration pour atoum en ajoutant la ligne suivante à
 votre fichier .vimrc:
@@ -392,3 +392,122 @@ suivante:
 
     [vim]
     :help atoum
+    
+### Ouvrir automatiquement les tests en échec
+
+atoum est capable d'ouvrir automatiquement les fichiers des tests en échec à la fin de l'exécution.
+Plusieurs éditeur sont actuellement supportés :
+
+* [macvim](#macvim) (Mac OS X)
+* [gvim](#gvim) (Unix)
+* [PhpStorm](#phpstorm) (Mac OS X / Unix)
+* [gedit](#gedit) (Unix)
+
+Pour utiliser cette fonctionnalité, vous devrez éditer votre [fichier de configuration](#fichier-de-configuration) :
+
+#### macvim
+
+
+    [php]
+    <?php
+    use
+        mageekguy\atoum,
+        mageekguy\atoum\report\fields\runner\failures\execute\macos
+    ;
+
+    $stdOutWriter = new atoum\writers\std\out();
+    $cliReport = new atoum\reports\realtime\cli();
+    $cliReport->addWriter($stdOutWriter);
+
+    $cliReport->addField(new macos\macvim());
+
+    $runner->addReport($cliReport);
+
+
+#### gvim
+
+    
+    [php]
+    <?php
+    use
+        mageekguy\atoum,
+        mageekguy\atoum\report\fields\runner\failures\execute\unix
+    ;
+
+    $stdOutWriter = new atoum\writers\std\out();
+    $cliReport = new atoum\reports\realtime\cli();
+    $cliReport->addWriter($stdOutWriter);
+
+    $cliReport->addField(new unix\gvim());
+
+    $runner->addReport($cliReport);
+
+
+#### PhpStorm
+
+
+Si vous travaillez sous Mac OS X, utilisez la configuration suivante :
+
+
+    [php]
+    <?php
+    use
+        mageekguy\atoum,
+        mageekguy\atoum\report\fields\runner\failures\execute\macos
+    ;
+
+    $stdOutWriter = new atoum\writers\std\out();
+    $cliReport = new atoum\reports\realtime\cli();
+    $cliReport->addWriter($stdOutWriter);
+
+    $cliReport 
+        // Si PhpStorm est installé dans /Applications       
+        ->addField(new macos\phpstorm())
+
+        // Si vous avez installé PhpStorm 
+        // dans un dossier différent de /Applications
+        // ->addField(new macos\phpstorm(/path/to/PhpStorm.app/Contents/MacOS/webide))
+    ;
+
+    $runner->addReport($cliReport);
+
+
+Dans un environnement Unix, utilisez la configuration suivante :
+
+
+    [php]
+    <?php
+    use
+        mageekguy\atoum,
+        mageekguy\atoum\report\fields\runner\failures\execute\unix
+    ;
+
+    $stdOutWriter = new atoum\writers\std\out();
+    $cliReport = new atoum\reports\realtime\cli();
+    $cliReport->addWriter($stdOutWriter);
+
+    $cliReport        
+        ->addField(new unix\phpstorm('/chemin/vers/PhpStorm/bin/phpstorm.sh'))
+    ;
+
+    $runner->addReport($cliReport);
+
+
+#### gedit
+
+
+    [php]
+    <?php
+    use
+        mageekguy\atoum,
+        mageekguy\atoum\report\fields\runner\failures\execute\unix
+    ;
+
+    $stdOutWriter = new atoum\writers\std\out();
+    $cliReport = new atoum\reports\realtime\cli();
+    $cliReport->addWriter($stdOutWriter);
+
+    $cliReport->addField(new unix\gedit());
+
+    $runner->addReport($cliReport);
+
