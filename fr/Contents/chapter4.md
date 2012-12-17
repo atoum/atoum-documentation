@@ -136,7 +136,7 @@ de la manière suivante :
     /**
      * @namespace #\\\my\\\tests\\\#
      */
-    abstract class aClass extends atoum\test
+    abstract class aClass extends atoum
     {
        public function testBar()
        {
@@ -160,7 +160,7 @@ le constructeur de la classe de test, de la manière suivante :
     
     use mageekguy\atoum;
     
-    abstract class aClass extends atoum\test
+    abstract class aClass extends atoum
     {
        public function __construct(score $score = null, locale $locale = null, adapter $adapter = null)
        {
@@ -190,7 +190,7 @@ de le faire une bonne fois pour toute dans une classe abstraite de la manière s
     
     use mageekguy\atoum;
     
-    abstract class Test extends atoum\test
+    abstract class Test extends atoum
     {
        public function __construct(score $score = null, locale $locale = null, adapter $adapter = null)
        {
@@ -259,7 +259,7 @@ Dans notre cas, elle pourrait être remplacé par la chaîne de caractères `\my
     /**
      * @namespace \my\tests\
      */
-    abstract class aClass extends atoum\test
+    abstract class aClass extends atoum
     {
        public function testBar()
        {
@@ -363,7 +363,7 @@ Créez un fichier Test.php qui servira de base à tous les futurs tests de ce Bu
     // Pour Symfony 2.0 uniquement !
     require_once __DIR__ . '/../../../../../vendor/mageekguy.atoum.phar';
 
-    abstract class Test extends atoum\test
+    abstract class Test extends atoum
     {
         public function __construct(
             adapter $adapter = null,

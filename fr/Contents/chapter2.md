@@ -2309,7 +2309,7 @@ traitements en conséquence.
 
     require __DIR__ . '/mageekguy.atoum.phar';
 
-    class bankAccount extends atoum\test
+    class bankAccount extends atoum
     {
         public function setUp()
         {
@@ -2387,7 +2387,7 @@ La définition du fournisseur de données qui doit être utilisé par une métho
 à l'annotation @dataProvider appliquée à la méthode de test concernée, de la manière suivante:
 
     [php]
-    class calculator extends atoum\test
+    class calculator extends atoum
     {
         /**
          * @dataProvider sumDataProvider
@@ -2412,7 +2412,7 @@ Si ce n'est pas le cas, atoum générera une erreur lors de l'exécution des tes
 Une fois l'annotation définie, il n'y a plus qu'à créer la méthode correspondante:
 
     [php]
-    class calculator extends atoum\test
+    class calculator extends atoum
     {
         ...
 

@@ -238,9 +238,9 @@ Maintenant, voici le code de la classe de test que nous pourrions écrire.
      * Classe de test pour \HelloWorld
 
      * Remarquez qu'elle porte le même nom que la classe à tester
-     * et qu'elle étend atoum\test
+     * et qu'elle étend atoum
      */
-    class HelloWorld extends atoum\test
+    class HelloWorld extends atoum
     {
         /*
          * Cette méthode est dédiée à la méthode getHiAtoum()
