@@ -335,7 +335,7 @@ exemple d'exécuter la commande suivante:
     $ php -r 'var_dump(1 - 0.97 === 0.03);'
     bool(false)
 
-Le résultat devrait pourtant être true. 
+Le résultat devrait pourtant être true.
 
 **Note**: pour avoir plus d'informations sur ce phénomène, reportez vous au
 [manuel PHP](http://php.net/types.float).
@@ -587,7 +587,7 @@ isZero vérifie que la durée de l'objet DateInterval est égale à 0.
         ->dateInterval($di2)
             ->isZero()      // échoue
     ;
-    
+
 
 
 
@@ -1260,7 +1260,7 @@ isEmpty vérifie qu'une chaine de caractères est vide.
     $this
         ->string($emptyString)
             ->isEmpty()             // passe
-    
+
         ->string($nonEmptyString)
             ->isEmpty()             // échoue
     ;
@@ -1289,7 +1289,7 @@ isNotEmpty vérifie qu'une chaine de caractères n'est pas vide.
     $this
         ->string($emptyString)
             ->isNotEmpty()          // échoue
-    
+
         ->string($nonEmptyString)
             ->isNotEmpty()          // passe
     ;
@@ -1461,7 +1461,7 @@ d'informations sur le sujet.
 
 C'est l'assertion dédiée à la destruction des objets.
 
-Cette assertion ne fait que prendre un objet, vérifier que la méthode __destruct() est bien définie 
+Cette assertion ne fait que prendre un objet, vérifier que la méthode __destruct() est bien définie
 puis l'appelle.
 
 Si __destruct() existe bien et si son appel se passe sans erreur ni exception, alors le test passe.
@@ -1487,6 +1487,7 @@ C'est l'assertion dédiée aux erreurs.
             }
         )
             ->error()
+                ->exists() // ou notExists
     ;
 
 **Note**: la syntaxe utilise les fonctions anonymes (aussi appelées fermetures ou closures)
@@ -1587,7 +1588,7 @@ hasInterface vérifie que la classe implémente une interface donnée.
     $this
         ->class('\ArrayIterator')
             ->hasInterface('Countable')     // passe
-            
+
         ->class('\StdClass')
             ->hasInterface('Countable')     // échoue
     ;
@@ -1600,7 +1601,7 @@ hasMethod vérifie que la classe contient une méthode donnée.
     $this
         ->class('\ArrayIterator')
             ->hasMethod('count')    // passe
-            
+
         ->class('\StdClass')
             ->hasMethod('count')    // échoue
     ;
@@ -1613,7 +1614,7 @@ hasNoParent vérifie que la classe n'hérite d'aucune classe.
     $this
         ->class('\StdClass')
             ->hasNoParent()     // passe
-            
+
         ->class('\FilesystemIterator')
             ->hasNoParent()     // échoue
     ;
@@ -1629,7 +1630,7 @@ hasParent vérifie que la classe hérite bien d'une classe.
     $this
         ->class('\StdClass')
             ->hasParent()       // échoue
-            
+
         ->class('\FilesystemIterator')
             ->hasParent()       // passe
     ;
@@ -1972,7 +1973,7 @@ qui lui est passée en argument, ce qui permet d'écrire le test précédent de 
         ->if($object = new object($valueAtKey0 = uniqid()))
         ->when(
             function() use ($object) {
-                unset($object[0]); 
+                unset($object[0]);
             }
         )
         ->then
@@ -2251,9 +2252,9 @@ assertions composant le test n'est pas vérifiée. Elle s'utilise de la manière
         ->if($foo = new foo())
         ->executeOnFailure(
             function() use ($foo) {
-                var_dump($foo); 
+                var_dump($foo);
             }
-        ) 
+        )
         ->then
             ->object($foo->setBar($bar = new bar()))
                 ->isIdenticalTo($foo)
@@ -2329,7 +2330,7 @@ traitements en conséquence.
 
                 case 'testGetOperations':
                     // Initialisation pour testGetOperations().
-                break;         
+                break;
             }
         }
 
@@ -2355,7 +2356,7 @@ traitements en conséquence.
 
                 case 'testGetOperations':
                     // Nettoyage pour testGetOperations().
-                break;         
+                break;
             }
         }
 
@@ -2399,7 +2400,7 @@ La définition du fournisseur de données qui doit être utilisé par une métho
                 ->if($calculator = new project\calculator())
                 ->then
                     ->integer($calculator->sum($a, $b))->isEqualTo($a + $b)
-            ; 
+            ;
         }
 
         ...
@@ -2455,11 +2456,11 @@ la plus simple est de créer un objet dont le nom absolu est préfixé par \mock
     [php]
     // création d'un bouchon de l'interface \Countable
     $countableMock = new \mock\Countable;
-    
+
     // création d'un bouchon de la classe abstraite
     // \Vendor\Project\AbstractClass
     $vendorAppMock = new \mock\Vendor\Project\AbstractClass;
-    
+
     // création d'un bouchon de la classe \StdClass
     $stdObject     = new \mock\StdClass;
 
@@ -2477,13 +2478,13 @@ Sa méthode generate prend 3 paramètres:
     // on ne change que l'espace de nom
     $this->mockGenerator->generate('\Countable', '\MyMock');
     $countableMock = new \myMock\Countable;
-    
+
     // création d'un bouchon de la classe abstraite
     // \Vendor\Project\AbstractClass vers \MyMock\AClass
     // on change l'espace de nom et le nom de la classe
     $this->mockGenerator->generate('\Countable', '\MyMock', 'AClass');
     $vendorAppMock = new \mock\Vendor\Project\AbstractClass;
-    
+
     // création d'un bouchon de la classe \StdClass vers \mock\OneClass
     // on ne change que le nom de la classe
     $this->mockGenerator->generate('\StdClass', null, 'OneClass');
