@@ -22,10 +22,88 @@ We need help to write this section !
 
 ==Utilisation dans Jenkins (ou Hudson)
 
-{{{todo
-We need help to write this section !
-([[https://github.com/atoum/atoum/wiki/atoum-et-Jenkins-(ou-Hudson)]])
+Il est très simple d'intégrer les résultats de tests atoum à [[Jenkins|http://jenkins-ci.org/]] (ou [[Hudson|http://hudson-ci.org/]]) en tant que résultats xUnit.
+
+===Étape 1 : Ajout d'un rapport xUnit à la configuration atoum
+
+====Vous n'avez pas de fichier de configuration
+
+Si vous ne disposez pas encore d'un fichier de configuration pour atoum, nous vous recommandons d'extraire le répertoire ressources de atoum dans celui de votre choix à l'aide de la commande suivante :
+
+* Si vous utilisez l'archive Phar d'atoum :
+
+[[[shell
+php mageekguy.atoum.phar --extractRessourcesTo /tmp/atoum-src
+cp /tmp/atoum-src/resources/configurations/runner/xunit.php.dist /mon/projet/.atoum.php
+]]]
+
+* Si vous utilisez les sources d'atoum :
+
+[[[shell
+cp /chemin/vers/atoum/resources/configurations/runner/xunit.php.dist /mon/projet/.atoum.php
+]]]
+
+* Vous pouvez également copier le fichier directement [[depuis le dépôt Github|https://github.com/atoum/atoum/blob/master/resources/configurations/runner/xunit.php.dist]]
+
+Il ne vous reste plus qu'à éditer ce fichier pour choisir l'emplacement où atoum génèrera le rapport xUnit. Ce fichier est prêt à l'emploi, avec lui, vous conserver le rapport par défaut d'atoum et vous obtiendrez un rapport xUnit à la suite de chaque lancement des tests.
+
+====Vous avez déjà un fichier de configuration
+
+Si vous disposez déjà d'un fichier de configuration, il vous suffit d'y ajouter les lignes suivantes :
+
+[[[php
+<?php
+
+//...
+
+/*
+ * Xunit report
+ */
+$xunit = new atoum\reports\asynchronous\xunit();
+$runner->addReport($xunit);
+
+/*
+ * Xunit writer
+ */
+$writer = new atoum\writers\file('/chemin/vers/le/rapport/atoum.xunit.xml');
+$xunit->addWriter($writer);
+]]]
+
+===Étape 2 : Tester la configuration
+
+Pour tester cette configuration, il suffit de lancer atoum en lui précisant le fichier de configuration que vous souhaitez utiliser :
+
+[[[shell
+php mageekguy.atoum.phar -d /chemin/vers/les/tests/units -c /chemin/vers/la/configuration.php
+]]]
+
+{{{info
+Si vous avez nommé votre fichier de configuration ##.atoum.php##, atoum le chargera automatiquement. Le paramètre ##-c## est donc optionnel dans ce cas.
+Pour qu'atoum charge automatiquement ce fichier, vous devrez lancer les tests à partir du dossier où se trouve le fichier ##.atoum.php## ou d'un de ses enfants.
 }}}
+
+À la fin de l'exécution des tests, vous devriez voir le rapport xUnit dans le répertoire indiqué dans le fichier de configuration.
+
+===Étape 3 : Lancement des tests via Jenkins (ou Hudson)
+
+Il existe pour cela plusieurs possibilités selon la façon dont vous construisez votre projet :
+
+* Si vous utilisez un script, il vous suffit d'y ajouter la commande précédente.
+* Si vous passez par un utilitaire tel que [[ant|http://ant.apache.org/]], il suffit d'ajouter une tâche de type exec à son fichier de configuration, de la manière suivante :
+
+[[[xml
+<target name="unitTests">
+  <exec executable="/usr/bin/php" failonerror="yes" failifexecutionfails="yes">
+    <arg line="/path/to/mageekguy.atoum.phar -p /chemin/vers/php -d /path/to/test/folder -c /path/to/atoumConfig.php" />
+  </exec>
+</target>
+]]]
+
+Vous noterez l'ajout du paramètre ##-p /chemin/vers/php## qui permet d'indiquer à atoum le chemin vers le binaire PHP qu'il doit utiliser pour exécuter les tests unitaires.
+
+===Étape 4 : Publier le rapport avec Jenkins (ou Hudson)
+
+Il suffit tout simplement d'activer la publication des rapports au format JUnit ou xUnit, en fonction du plug-in que vous utilisez, en lui indiquant le chemin d'accès au fichier généré par atoum.
 
 ==Hook git
 
