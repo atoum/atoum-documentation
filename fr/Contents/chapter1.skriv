@@ -19,7 +19,7 @@ Vous pouvez installer atoum de plusieurs manières:
 * [[en clonant le dépôt github|#Github]] ;
 * [[en utilisant un plugin symfony 1|#Plugin-symfony-1]] ;
 * [[en utilisant un bundle Symfony 2|#Bundle-Symfony-2]].
-* [[en utilisant un composant Zend Framework 2|#Composant-zend-framework-2]].
+* [[en utilisant un composant Zend Framework 2|#Composant-Zend-Framework-2]].
 
 
 ===Archive PHAR
