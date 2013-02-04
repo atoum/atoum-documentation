@@ -3166,9 +3166,9 @@ Un fournisseur de données peut au choix retourner un tableau ou bien un itérat
 
 ==Les bouchons
 
-atoum dispose d'un système de bouchonnage (mock en anglais) puissant et simple à mettre en œuvre.
+atoum dispose d'un système de bouchonnage (mock en anglais) puissant et simple à mettre en œuvre qui vous permettra de générer des mocks à partir de classes (existantes ou inexistantes) ou d'interfaces, mais également à partir de classe abstraite. Grâce à ces bouchons, vous pourrez simuler des comportements en redéfinissant les méthodes publiques de vos classes.
 
-===À partir d'une interface ou d'une classe existante
+===Générer un bouchon
 
 Il y a plusieurs manière de créer un bouchon à partir d'une interface ou d'une classe (abstraite ou non).
 
@@ -3184,7 +3184,18 @@ $vendorAppMock = new \mock\Vendor\Project\AbstractClass;
 
 // création d'un bouchon de la classe \StdClass
 $stdObject     = new \mock\StdClass;
+
+// création d'un bouchon à partir d'une classe inexistante
+$anonymousMock = new \mock\My\Unknown\Class;
 ]]]
+
+===Le générateur de bouchon
+
+atoum s'appuie sur un composant spécialisé pour générer les bouchons : le ##mockGenerator##. Vous avez accès à ce dernier dans vos tests afin de modifier la procédure de génération des mocks.
+
+Par défaut, les bouchons seront générés dans le namespace ##mock## et se comporteront exactement de la même manière que les instances de la classe originale (le bouchon hérite directement de la classe originale).
+
+====Changer le nom de la classe
 
 Si vous désirez changer le nom de la classe ou son espace de nom, vous devez utiliser le ##mockGenerator##.
 
@@ -3224,36 +3235,79 @@ $this->mockGenerator->generate('\Countable');   // inutile
 $countableMock = new \mock\Countable;
 ]]]
 
+====Shunter les appels aux méthodes parentes
 
-===À partir de rien
+Un bouchon hérite directement de la classe à partir de laquelle il a été généré, ses méthodes se comportent donc exactement de la même manière.
 
-Vous pouvez également créer un bouchon qui ne soit pas lié à une interface ou une classe (abstraite ou non) existante.
-
-Pour cela, et bien faite comme si elle existait !
-
-En effet, le code suivant fonctionne parfaitement:
+Dans certains cas, il peut être utile de shunter les appels aux méthodes parents afin que leur code ne soit plus exécuté. Le ##mockGenerator## met à votre disposition plusieurs méthodes pour y parvenir :
 
 [[[php
-$firstMockedObject  = new \mock\MyUnknownClass;
-$secondMockedObject = new \mock\My\Unknown\Class;
+$this->mockGenerator->shuntParentClassCalls();
+// le bouchon ne fera pas appel à la classe parente
+$countableMock = new \mock\OneClass;
+$this->mockGenerator->unshuntParentClassCalls();
+]]]
+
+Ici, toutes les méthodes du bouchon se comporteront comme si elles n’avaient pas d’implémentation par contre elles conserveront la signature des méthodes originales. Vous pouvez également préciser les méthodes que vous souhaitez shunter :
+
+[[[php
+$this->mockGenerator->shunt('firstMethod');
+$this->mockGenerator->shunt('secondMethod');
+// le bouchon ne fera pas appel à la classe parente pour les méthodes firstMethod et secondMethod
+$countableMock = new \mock\OneClass;
+]]]
+
+====Rendre une méthode orpheline
+
+Il peut parfois être intéressant de rendre une méthode orpheline, c'est-à-dire, lui donner une signature et une implémentation vide. Cela peut être particulièrement utile pour générer des bouchons sans avoir à instancier toutes leurs dépendances.
+
+[[[php
+class FirstClass {
+    protected $dep;
+
+    public function __construct(SecondClass $dep) {
+        $this->dep = $dep;
+    }
+}
+
+class SecondClass {
+    protected $deps;
+
+    public function __construct(ThirdClass $a, FourthClass $b) {
+        $this->deps = array($a, $b);
+    }
+}
+
+$this->mockGenerator->orphanize('__construct');
+$this->mockGenerator->shuntParentClassCalls();
+
+// Nous pouvons instancier le bouchon sans injecter ses dépendances
+$mock = new \mock\SecondClass();
+
+$object = new FirstClass($mock);
 ]]]
 
 ===Modifier le comportement d'un bouchon
 
 Une fois le bouchon créé et instancié, il est souvent utile de pouvoir modifier le comportement de ses méthodes.
 
-Pour cela, il faut passer par son contrôleur en utilisant la méthode ##getMockController()##.
-
-{{{info
-Vous ne pouvez redéfinir que les méthodes publiques.
-}}}
+Pour cela, il faut passer par son contrôleur en utilisant l'une des méthodes suivantes :
 
 [[[php
 $databaseClient = new \mock\Database\Client();
 
-// redéfinie la méthode connect
 $databaseClient->getMockController()->connect = function() {};
+// Équivalent à
+$this->calling($databaseClient)->connect = function() {};
+]]]
 
+Le ##mockController## vous permet de redéfinir **uniquement les méthodes publiques et abstraites protégées** et met à votre disposition plusieurs méthodes :
+
+[[[php
+$databaseClient = new \mock\Database\Client();
+
+// redéfinie la méthode connect : elle retournera toujours true
+$databaseClient->getMockController()->connect = true;
 
 // redéfinie la méthode select
 $databaseClient->getMockController()->select = function() {
@@ -3261,48 +3315,43 @@ $databaseClient->getMockController()->select = function() {
 };
 
 // redéfinie la méthode query avec des arguments
-$databaseClient->getMockController()->query = function(Query $query) {
+$result = array();
+$databaseClient->getMockController()->query = function(Query $query) use($result) {
     switch($query->type) {
         case Query::SELECT:
-            return array();
-        break;
+            return $result
 
         default;
             return null;
     }
 };
+
+// la méthode connect lèvera une exception
+$databaseClient->getMockController()->connect->throw = new \Database\Client\Exception();
 ]]]
 
-{{{info
-Vous pouvez définir directement une valeur à retourner systématiquement.
-}}}
-
-[[[php
-// indique que la méthode query retourne systématiquement un tableau vide
-$databaseClient->getMockController()->query = array();
-
-// équivalent à:
-$databaseClient->getMockController()->query = function() {
-    return array();
-};
-]]]
-
+Comme vous pouvez le voir, il est possible d'utiliser plusieurs méthodes afin d'obtenir le comportement souhaité :
+* Utiliser une valeur statique qui sera retournée par la méthode
+* Utilser une implémentation courte grâce aux fonctions anonymes de PHP
+* Utiliser le mot clé ##throw## pour lever une exception
 
 ===Cas particulier du constructeur
 
 Pour bouchonner le constructeur d'une classe, il faut:
 * créer une instance de la classe \atoum\mock\controller avant d'appeler le constructeur du bouchon ;
 * définir via ce contrôleur le comportement du constructeur du bouchon à l'aide d'une fonction anonyme ;
-* appeler sur le contrôleur la méthode injectInNextMockInstance().
+* injecter le contrôleur lors de l'instanciation du bouchon.
 
 [[[php
 $controller = new \atoum\mock\controller();
 $controller->__construct = function() {};
-$controller->injectInNextMockInstance();
 
-$databaseClient = new \mock\Database\Client();
+$databaseClient = new \mock\Database\Client($controller);
 ]]]
 
+{{{info
+Dans l'exemple ci-dessus, le constructeur de la classe ##\Database\Client## n'a aucun argument, nous injectons directement le contrôleur. Dans le cas d'un constructeur ayant des paramètres, il faudra passer le contrôleur en dernier argument, après tous les arguments requis et optionnels.
+}}}
 
 ===Tester un bouchon
 
