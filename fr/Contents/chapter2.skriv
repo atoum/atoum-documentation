@@ -94,6 +94,9 @@ $this
 
     ->variable($string)
         ->isNotCallable()   // passe
+
+    ->variable(new StdClass)
+        ->isNotCallable()   // passe
 ;
 ]]]
 
@@ -598,6 +601,28 @@ $this
 
 ====isCallable====objectIsCallable
 
+[[[php
+class foo
+{
+    public function __invoke()
+    {
+        // code
+    }
+}
+
+$this
+    ->object(new foo)
+        ->isCallable()  // passe
+
+    ->object(new StdClass)
+        ->isCallable()  // échoue
+;
+]]]
+
+{{{info
+Pour être identifiés comme ##callable##, vos objets devront être instanciés à partir de classes qui implémentent la méthode magique [[##invoke## | http://www.php.net/manual/fr/language.oop5.magic.php#object.invoke]].
+}}}
+
 {{{inheritance
 ##isCallable## est une méthode héritée de l'asserter ##variable##.
 Pour plus d'informations, rendez-vous sur la documentation de [[##variable::isCallable##|#variableIsCallable]]
@@ -699,7 +724,30 @@ $this
 Les noms des classes et des interfaces doit être absolu et commencé par un antislash.
 }}}
 
+====isNotCallable====objectIsNotCallable
 
+[[[php
+class foo
+{
+    public function __invoke()
+    {
+        // code
+    }
+}
+
+$this
+    ->variable(new foo)
+        ->isNotCallable()   // échoue
+
+    ->variable(new StdClass)
+        ->isNotCallable()   // passe
+;
+]]]
+
+{{{inheritance
+##isNotCallable## est une méthode héritée de l'asserter ##variable##.
+Pour plus d'informations, rendez-vous sur la documentation de [[##variable::isNotCallable##|#variableIsNotCallable]]
+}}}
 
 ===dateInterval
 
