@@ -528,13 +528,13 @@ Success (1 test, 1/1 method, 0 skipped method, 4 assertions) !
 
 Si vous souhaitez utiliser atoum au sein de vos projets Symfony 1.4, vous pouvez installer le  plugin sfAtoumPlugin. Celui-ci est disponible à l'adresse suivante:  [[https://github.com/atoum/sfAtoumPlugin|https://github.com/atoum/sfAtoumPlugin]].
 
-==Installation
+===Installation
 
 Il existe plusieurs méthodes d'installation du plugin dans votre projet :
 * installation via composer
 * installation via des submodules git
 
-===En utilisant composer
+====En utilisant composer
 
 Ajouter ceci dans le composer.json :
 
@@ -557,7 +557,7 @@ if (sfConfig::get('sf_environment') != 'prod')
 }
 ]]]
 
-===En utilisant des submodules git
+====En utilisant des submodules git
 
 Il faut tout d'abord ajouter atoum en tant que submodule :
 
@@ -581,7 +581,7 @@ if (sfConfig::get('sf_environment') != 'prod')
 ]]]
 
 
-==Ecrire les tests
+===Ecrire les tests
 
 Les tests doivent inclure le fichier de bootstrap se trouvant dans le plugin :
 
@@ -590,7 +590,7 @@ require_once __DIR__ . '/../../../../plugins/sfAtoumPlugin/bootstrap/unit.php';
 ]]]
 
 
-==Lancer les tests
+===Lancer les tests
 
 La commande symfony atoum:test est disponible. Les tests peuvent alors se lancer de cette façon :
 
