@@ -2601,7 +2601,7 @@ $this
         ->call('myMethod')
             ->withArguments('first')     ->once()
             ->withArguments('second')    ->once()
-            ->withAnyArgumentsArguments()->exactly(2)
+            ->withAnyArguments()->exactly(2)
 ;
 ]]]
 
