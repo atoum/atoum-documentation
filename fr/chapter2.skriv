@@ -3261,8 +3261,8 @@ $countableMock = new \myMock\Countable;
 // création d'un bouchon de la classe abstraite
 // \Vendor\Project\AbstractClass vers \MyMock\AClass
 // on change l'espace de nom et le nom de la classe
-$this->mockGenerator->generate('\Countable', '\MyMock', 'AClass');
-$vendorAppMock = new \mock\Vendor\Project\AbstractClass;
+$this->mockGenerator->generate('\Vendor\Project\AbstractClass', '\MyMock', 'AClass');
+$vendorAppMock = new \myMock\AClass;
 
 // création d'un bouchon de la classe \StdClass vers \mock\OneClass
 // on ne change que le nom de la classe
