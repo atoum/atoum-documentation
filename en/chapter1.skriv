@@ -2,12 +2,13 @@
 
 ==What is atoum ?
 
-atoum is a unit testing framework, like PHPUnit or SimpleTest.
 
-atoum distinguished itself as :
-* It is modern and based on the last PHP versions
-* It is quite simple and straightforward, with a very limited learning curve
-* It is intuitive : its API wants to be as close as possible as a natural language
+Atoum is a unit test framework, similar to PHPunit or SimpleTest, however:
+
+* It is more modern and makes use of the latest PHP features.
+* It is simpler to use and master.
+* It is more intuitive and its syntax is as close as possible to the English natural language
+
 
 ==Download & Install
 
@@ -39,7 +40,7 @@ php -d phar.readonly=0 mageekguy.atoum.phar --update
 ]]]
 
 {{{info
-To update atoum PHP needs to be able to update PHAR archives, wich is disable by default, reason why you have to specify the option ##-d phar.readonly=0##.
+To update atoum PHP needs to be able to update PHAR archives, which is disable by default, reason why you have to specify the option ##-d phar.readonly=0##.
 }}}
 
 If a newer version of atoum exists, it will be downloaded and installed in the archive itself :
@@ -338,7 +339,7 @@ call atoum#defineConfiguration('/path/to/project/directory', '/path/to/atoum/con
 
 The atoum#defineConfiguration function enables you to define the configuration file to use based on your unit test directory.
 
-Shoe accepts three arguments :
+Shoe takes 3 arguments :
 * The path to the unit tests directory
 * The path to the atoum's configuration file to be considered
 * The extension of the unit test files that will be concerned.

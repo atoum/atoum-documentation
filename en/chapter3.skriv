@@ -1,9 +1,635 @@
 =Launching tests
 
-==Command line
+==Executable
 
-===Single File
+Atoum has an executable that allow you to launch your tests from the command line.
 
-===Many files
+===Using the phar archive
 
-==Phing integration
+If you are using the phar archive, then the archive is itself the executable.
+
+====linux / mac====pharLinuxMac
+
+[[[shell
+$ php path/to/mageekguy.atoum.phar
+]]]
+
+====windows====pharWindows
+
+[[[shell
+C:\> X:\Path\To\php.exe X:\Path\To\mageekguy.atoum.phar
+]]]
+
+
+===Using the source
+
+If you are using the source, the executable is located in path/to/atoum/bin.
+
+====linux / mac====sourceLinuxMac
+
+[[[shell
+$ php path/to/bin/atoum
+
+# OU #
+
+$ ./path/to/bin/atoum
+]]]
+
+====windows====sourceWindows
+
+[[[shell
+C:\> X:\Path\To\php.exe X:\Path\To\bin\atoum\bin
+]]]
+
+
+===Examples in the remainder of the Documentation 
+
+In the following examples, the commands used to launch the tests with Atoum will be written in the form:
+
+[[[shell
+$ ./bin/atoum
+]]]
+
+This is the exact command you would use if you have [[installed Atoum with composer|chapter1.html#Composer]] under Linux
+
+
+==Files to execute
+
+===By File
+
+In order to launch tests on a file, you only need to use the -f or --files option.
+
+[[[shell
+$ ./bin/atoum -f tests/units/MyTest.php
+]]]
+
+
+===By Directory
+
+In order to launch tests on a directory, you only need to use the -d or --directories option.
+
+[[[shell
+$ ./bin/atoum -d tests/units
+]]]
+
+
+==Filters
+
+Once you have told Atoum [[which files it must execute|#Files to execute]], you will be able to filter to will really be executed.
+
+===By Namespace
+
+In order to filter on a namespace, that is to execute the tests solely on a given namespace, you only need need to use the -ns or --namespace option.
+
+[[[shell
+$ ./bin/atoum -d tests/units -ns mageekguy\\atoum\\tests\\units\\asserters
+]]]
+
+{{{info
+It is important to double each backslash in order to prevent the shell from interpreting them. 
+}}}
+
+===Class or method
+
+In order to filter on a class or a method, that is to executre only the tests of a particular class or method, you need only to use the -m or --methods options.
+
+[[[shell
+$ ./bin/atoum -d tests/units -m mageekguy\\atoum\\tests\\units\\asserters\\string::testContains
+]]]
+
+{{{info
+It is important to double each backslash in order to prevent the shell from interpreting them. 
+}}}
+
+You can replace the class or method name by ##*## to signify ##all##.
+
+If you replace the method name by ##*##, it reslults in filtering by class.
+
+[[[shell
+$ ./bin/atoum -d tests/units -m mageekguy\\atoum\\tests\\units\\asserters\\string::*
+]]]
+
+If you replace the class name by ##**##, it results in filtering by methods.
+
+[[[shell
+$ ./bin/atoum -d tests/units -m *::testContains
+]]]
+
+===Tags
+
+Just as numerous tools such as [[Behat|http://behat.rg]], Atoum allows you to tag your unit tests and to execute only those with (a) specific tag(s)
+
+In order for this to happen, one must begin by defining (a) tag(s) for (a) class(es) of unit tests.
+
+It can easily be done thanks to the annotation or the anchor @tags:
+
+[[[php
+<?php
+
+namespace vendor\project\tests\units;
+
+require_once __DIR__ . '/mageekguy.atoum.phar';
+
+use mageekguy\atoum;
+
+/**
+ * @tags thisIsOneTag thisIsTwoTag thisIsThreeTag
+ */
+class foo extends atoum\test
+{
+    public function testBar()
+    {
+        ...
+    }
+}
+]]]
+
+
+It is also possible to tag test methods.
+
+{{{info
+Tags defined at method level overtake those defined at class level.
+}}}
+
+[[[php
+<?php
+
+namespace vendor\project\tests\units;
+
+require_once __DIR__ . '/mageekguy.atoum.phar';
+
+use mageekguy\atoum;
+
+class foo extends atoum\test
+{
+    /**
+     * @tags thisIsOneMethodTag thisIsTwoMethodTag thisIsThreeMethodTag
+     */
+    public function testBar()
+    {
+        ...
+    }
+}
+]]]
+
+Once the necessary tags have been defined, tests can be executed with or without the required tags by using the option --tags or -t for its shorthand version.
+
+[[[shell
+$ ./bin/atoum -d tests/units -t thisIsOneTag
+]]]
+
+Warning, this instruction only makes sense if there is one or more class of unit tests and if at least one of them is tagged with the specified tag. In the opposite case, no test will be performed.
+
+It is possible to define several tags:
+
+[[[shell
+$ ./bin/atoum -d tests/units -t thisIsOneTag thisIsThreeTag
+]]]
+
+In that last case, the tests classes having been tagged with thisIsOneTag or with thisIsThreeTag will be the only one executed.
+
+==Configuration files
+
+{{{todo
+We need help to write this section !
+}}}
+
+===Code Coverage
+
+By default, if PHP can make use of the [[Xdebug|http://xdebug.org]] extension, Atoum will indicate in command line mode the code coverage percentage for the tests just executed.  
+
+If the code coverage percentage is 100%, Atoum merely indicate it, but if it is not the case, it will display the global coverage percentage as well as that of each tested class method.
+
+[[[shell
+$ php tests/units/classes/template.php
+> atoum version DEVELOPMENT by Frederic Hardy (/Users/fch/Atoum)
+> PHP path: /usr/local/bin/php
+> PHP version:
+=> PHP 5.3.8 (cli) (built: Sep 21 2011 23:14:37)
+=> Copyright (c) 1997-2011 The PHP Group
+=> Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
+=>     with Xdebug v2.1.1, Copyright (c) 2002-2011, by Derick Rethans
+> mageekguy\atoum\tests\units\template...
+[SSSSSSSSSSSSSSSSSSSSSSSSSSS_________________________________][27/27]
+=> Test duration: 15.63 seconds.
+=> Memory usage: 8.25 Mb.
+> Total test duration: 15.63 seconds.
+> Total test memory usage: 8.25 Mb.
+> Code coverage value: 92.52%
+=> Class mageekguy\atoum\template: 91.14%
+==> mageekguy\atoum\template::setWith(): 80.00%
+==> mageekguy\atoum\template::resetChildrenData(): 25.00%
+==> mageekguy\atoum\template::addToParent(): 0.00%
+==> mageekguy\atoum\template::unsetAttribute(): 0.00%
+=> Class mageekguy\atoum\template\data: 96.43%
+==> mageekguy\atoum\template\data::__toString(): 0.00%
+> Running duration: 2.36 seconds.
+Success (1 test, 27 methods, 485 assertions, 0 error, 0 exception) !
+]]]
+
+It is however possible to obtain a more precise representation of the code coverage percentage by the tests in the form of an HTML report. In order to obtain it, one only needs to base it on the configuration files models included in Atoum. If you are using the PHAR archive, it must be extracted by using the following command:
+
+[[[php
+php mageekguy.atoum.phar -er /path/to/destination/directory
+]]]
+
+Once the extraction has been perfomed, you should be able to see a directory named "resources/configuration.runner" in the directory "/path/to/destination/directory".
+
+If you are using Atoum with a [[github repository clone|chapter1.html#Github]] or with [[composer|chapter1.html#Composer]], the models can be found in "/path/to/atoum/resources/configurations/runner.
+
+In this directory are, among other interesting things, an Atoum configuration file model named "coverage.php.dist" that you will need to copy at the location of your choosing under, for example, the name "coverage.php". 
+
+Once the copy has been performed, modify it with you prefered editor in order to define: 
+
+* the directory in wich HTML files shall be generated. 
+* the URL from which the report will be accessible.
+
+
+For example:
+
+[[[php
+$coverageField = new atoum\report\fields\runner\coverage\html(
+    'Code coverage de mon projet',
+    '/path/to/destination/directory'
+);
+
+$coverageField->setRootUrl('http://url/of/web/site');
+]]]
+
+{{{info
+It is also possible to modify the report title using the first argument of the "mageekguy\atoum\report\fields\runner\coverage\html" class's constructor.
+}}}
+
+Once this is all done, the configuration file can be used at tests execution time as follows:
+
+[[[shell
+$ ./bin/atoum -c path/to/coverage.php -d tests/units
+]]]
+One the tests have been executed, Atoum will generate the code coverage report in HTML format in the directory previously defined. It then will be readable using your favorite browser.
+
+{{{info
+The calculation of the code coverage percentage as well as the corresponding reporting can significally slow down the tests execution. It can therefore be interesting to not systematically make use of the conrresponding configuration file or to temporarily deactivate them using the -ncc option.
+}}}
+
+==Fichier de bootstrap
+
+Atoum can use a ##bootstrap## file which will be executed before each test method thus allowing the initialization of the tests execution environment.
+
+Using it makes it possible for example to define a class autoloading function, to read a configuration file or to perform any other operation necessary to the proper tests execution.
+
+The ##bootstrap## file definition can be done in 2 differents manners, either by using the command line or via a configuration file
+
+When using the command line, the -bf or the --bootstrap-file option followed by the relative or absolute path to the bootstrap file intended to be used.
+
+[[[shell
+$ ./bin/atoum -bf path/to/bootstrap/file
+]]]
+
+{{{info
+A boostrap file is not a configuration file et therefore does not the have the same capabilities.
+}}}
+
+In a configuration file, Atoum is configured via the $runner variable, which is itself defined in ##bootstrap## file.
+
+Moreover, both files are not included at the same time since the configuration file is included by Atoum before the tests execution but after the launching of the tests, when the ##bootstrap file, should it be defined, is the first and foremost file included by Atoum. 
+
+Finally the ##bootstrap## can help avoid systematically loading the /scripts/runner.php file or the Atoum PHAR archive in the test classes. 
+
+However, in this case, it won't possible to execute directly a test file via the PHP executable when using the command line.
+
+In order to do this, one must include the scripts/runner.php or the Atoum PHAR archive in the ##bootstrap## file and systematically execute the tests using the command line via scripts/runner/.php ou the PHAR archive.
+
+The ##bootstrap## file must at mininum contain this:
+
+[[[php
+<?php
+
+// if the PHAR archive is used:
+require_once path/to/mageekguy.atoum.phar;
+
+// or if the source is used:
+// require_once path/atoum/scripts/runner.php
+]]]
+
+==Command line options
+
+Most of the options exist come in 2 flavours, the short version (1 to 6 characters) and the more explicit long version. Both flavours do the exact same thing and you can use them indifferently.
+
+Certain options can accept multiple values:
+
+[[[shell
+$ ./bin/atoum -f tests/units/MyFirstTest.php tests/units/MySecondTest.php
+]]]
+
+
+{{{info
+You must use each option only once, if you do not only the repeated option will be taken into account and all others will be discarded.
+}}}
+
+[[[shell
+# Only tests "MySecondTest.php"
+$ ./bin/atoum -f MyFirstTest.php -f MySecondTest.php
+
+# Only tests "MyThirdTest.php" and "MyFourthTest.php"
+$ ./bin/atoum -f MyFirstTest.php MySecondTest.php -f MyThirdTest.php MyFourthTest.php
+]]]
+
+===-bf <file> / --bootstrap-file <file>
+
+Specifies to the path to the bootstrap file.
+
+[[[shell
+$ ./bin/atoum -bf /path/to/bootstrap.php
+$ ./bin/atoum --bootstrap-file /path/to/bootstrap.php
+]]]
+
+===-c <file> / --configuration <file>
+
+Specifies which configuration to use to launch the tests.
+
+[[[shell
+$ ./bin/atoum -c config/atoum.php
+$ ./bin/atoum --configuration tests/units/conf/coverage.php
+]]]
+
+===-d <directories> / --directories <directories>
+
+Specifies one or more directories containing tests to be launched.
+
+[[[shell
+$ ./bin/atoum -d tests/units/db/
+$ ./bin/atoum --directories tests/units/db/ tests/units/entities/
+]]]
+
+===--debug
+
+Turns debug mode on
+
+[[[shell
+$ ./bin/atoum --debug
+]]]
+
+{{{info
+Check out [[debug mode|chapter2.html#Debug-mode]] section for more information.
+}}}
+
+===-drt <string> / --default-report-title <string>
+
+Specifies the title used in reports generated by Atoum.
+
+[[[shell
+$ ./bin/atoum -drt Title
+$ ./bin/atoum --default-report-title "My Title"
+]]]
+
+{{{info
+If the title contains spaces, it must be enclosed in double quotes.
+}}}
+
+===-f <files> / --files <files>
+
+Specifies tests files to launch.
+
+[[[shell
+$ ./bin/atoum -f tests/units/db/mysql.php
+$ ./bin/atoum --files tests/units/db/mysql.php tests/units/db/pgsql.php
+]]]
+
+===-ft / --force-terminal
+
+Forces output to stdout.
+
+[[[shell
+$ ./bin/atoum -ft
+$ ./bin/atoum --force-terminal
+]]]
+
+===-g <pattern> / --glob <pattern>
+
+Filters tests files to launch by pattern(s).
+
+[[[shell
+$ ./bin/atoum -g ???
+$ ./bin/atoum --glob ???
+]]]
+
+===-h / --help
+
+Lists the available options.
+
+[[[shell
+$ ./bin/atoum -h
+$ ./bin/atoum --help
+]]]
+
+===-l / --loop
+
+Activates Atoum's loop mode.
+
+[[[shell
+$ ./bin/atoum -l
+$ ./bin/atoum --loop
+]]]
+
+{{{info
+Check out the [[loop mode|chapter2.html#loop-mode]] section for more information.
+}}}
+
+===-m <class::method> / --methods <class::methods>
+
+Filters classes and methods to launch.
+
+[[[shell
+# Launches only the method "testMyMethod" of class "vendor\\project\\test\\units\\myClass"
+$ ./bin/atoum -m vendor\\project\\test\\units\\myClass::testMyMethod
+$ ./bin/atoum --methods vendor\\project\\test\\units\\myClass::testMyMethod
+
+# Launches all the test methods on class "vendor\\project\\test\\units\\myClass"
+$ ./bin/atoum -m vendor\\project\\test\\units\\myClass::*
+$ ./bin/atoum --methods vendor\\project\\test\\units\\myClass::*
+
+# Launches only the method "testMyMethod" of all test classes
+$ ./bin/atoum -m *::testMyMethod
+$ ./bin/atoum --methods *::testMyMethod
+]]]
+
+{{{info
+Check out the [[filter by class or method|#Class-Or-Method]] section for more information.
+}}}
+
+===-mcn <integer> / --max-children-number <integer>
+
+Defines the maximum number of simulaneous processes launched to execute tests.
+
+[[[shell
+$ ./bin/atoum -mcn 5
+$ ./bin/atoum --max-children-number 3
+]]]
+
+===-ncc / --no-code-coverage
+
+Deactivates the code coverage reporting.
+
+[[[shell
+$ ./bin/atoum -ncc
+$ ./bin/atoum --no-code-coverage
+]]]
+
+===-nccfc <classes> / --no-code-coverage-for-classes <classes>
+
+Deactivates code coverage reporting for one or more classes.
+
+[[[shell
+$ ./bin/atoum -nccfc vendor\\project\\db\\mysql
+$ ./bin/atoum --no-code-coverage-for-classes vendor\\project\\db\\mysql vendor\\project\\db\\pgsql
+]]]
+
+{{{info
+It is important to double each backslash in order to prevent the shell from interpreting them. 
+}}}
+
+===-nccfns <namespaces> / --no-code-coverage-for-namespaces <namespaces>
+
+Deactivates code coverage reporting for one or more namespaces.
+
+[[[shell
+$ ./bin/atoum -nccfns vendor\\outside\\lib
+$ ./bin/atoum --no-code-coverage-for-namespaces vendor\\outside\\lib1 vendor\\outside\\lib2
+]]]
+
+{{{info
+It is important to double each backslash in order to prevent the shell from interpreting them. 
+}}}
+
+===-nccid <directories> / --no-code-coverage-in-directories <directories>
+
+Deactivates code coverage reporting for one or more directories.
+
+[[[shell
+$ ./bin/atoum -nccid /path/to/exclude
+$ ./bin/atoum --no-code-coverage-in-directories /path/to/exclude/1 /path/to/exclude/2
+]]]
+
+===-ns <namespaces> / --namespaces <namespaces>
+
+Filters the class(es) and method(s) by namespace(s).
+
+[[[shell
+$ ./bin/atoum -ns mageekguy\\atoum\\tests\\units\\asserters
+$ ./bin/atoum --namespaces mageekguy\\atoum\\tests\\units\\asserters
+]]]
+
+{{{info
+Check out the [[filter by namespace|By namespace]] section for more information.
+}}}
+
+===-p <file> / --php <file>
+
+Specifies the path to the php executable used to launch the test(s).
+
+[[[shell
+$ ./bin/atoum -p /usr/bin/php5
+$ ./bin/atoum --php /usr/bin/php5
+]]]
+
+By default the seeked value is looked up among the following values (in that order):
+
+* PHP_BINARY constant.
+* PHP_PEAR_PHP_BIN environment variable.
+* PHPBON environment variable.
+* PHP_BINDIR + '/php' constant.
+
+===-sf <file> / --score-file <file>
+
+specifies a path to the score file generated by Atoum.
+
+[[[shell
+$ ./bin/atoum -sf /path/to/atoum.score
+$ ./bin/atoum --score-file /path/to/atoum.score
+]]]
+
+===-t <tags> / --tags <tags>
+
+Filters class(es) and method(s) to launch by tag.
+
+[[[shell
+$ ./bin/atoum -t OneTag
+$ ./bin/atoum --tags OneTag TwoTag
+]]]
+
+{{{info
+Check out the [filter by tag|#Tags]] section for more information.
+}}}
+
+===--test-all
+
+Launches the tests found in the directories defined in the configuration file via $script->addTestAllDirectory('path/to/directory').
+
+[[[shell
+$ ./bin/atoum --test-all
+]]]
+
+===--test-it
+
+Launches the Atoum unit tests in order to verify that they can execute properly on your machine.
+
+[[[shell
+$ ./bin/atoum --test-it
+]]]
+
+===-tfe <extensions> / --test-file-extensions <extensions>
+
+Specifies the extension(s) of the test files to launch.
+
+[[[shell
+$ ./bin/atoum -tfe phpt
+$ ./bin/atoum --test-file-extensions phpt php5t
+]]]
+
+===-ulr / --use-light-report
+
+Ligthens the report output generated by Atoum.
+
+[[[shell
+$ ./bin/atoum -ulr
+$ ./bin/atoum --use-light-report
+
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][  59/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 118/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 177/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 236/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 295/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 354/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 413/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 472/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 531/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 590/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 649/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 708/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 767/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 826/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 885/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][ 944/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][1003/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][1062/1141]
+[SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS>][1121/1141]
+[SSSSSSSSSSSSSSSSSSSS________________________________________][1141/1141]
+Success (154 tests, 1141/1141 methods, 0 void method, 0 skipped method, 16875 assertions) !
+]]]
+
+===-v / --version
+
+This option displays the current version of Atoum.
+
+[[[shell
+$ ./bin/atoum -v
+$ ./bin/atoum --version
+
+atoum version DEVELOPMENT by Frédéric Hardy (/path/to/atoum)
+]]]
+
+==Exit
+
+{{{todo
+We need help to write this section !
+}}}
