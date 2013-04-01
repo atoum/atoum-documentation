@@ -395,6 +395,22 @@ $this->assert
             ->hasLength(16);//Will fail
 ]]]
 
+===hasLengthGreaterThan
+
+hasLengthGreaterThan will verify that the string has a length greater than the given length.
+
+[[[php
+$string = 'Hello the world';
+
+$this->assert
+        ->string($string)
+            ->hasLengthGreaterThan(11);//Will pass
+
+$this->assert
+        ->string($string)
+            ->hasLengthGreaterThan(17);//Will fail
+]]]
+
 ==dateTime
 
 This is the asserter dedicated to DateTime testing.
