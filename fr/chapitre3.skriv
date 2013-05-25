@@ -272,6 +272,108 @@ Une fois les tests exécutés, atoum générera alors le rapport de couverture d
 Le calcul du taux de couverture du code par les tests ainsi que la génération du rapport correspondant peuvent ralentir de manière notable l'exécution des tests. Il peut être alors intéressant de ne pas utiliser systématiquement le fichier de configuration correspondant, ou bien de les désactiver temporairement à l'aide de l'argument -ncc.
 }}}
 
+===Notifications
+
+atoum est capable de vous prévenir lorsque les tests sont exécutés en utilisant plusieurs système de notification : [[Growl|#Growl]], [[Notification Center|#OSXNotificationCenter]], [[Libnotify|#Libnotify]].
+
+====Growl
+
+Cette fonctionnalité nécessite la présence de l'exécutable ##growlnotify##. Pour vérifier s'il est disponible, utilisez la commande suivante :
+
+[[[shell
+$ which growlnotify && echo $?
+/chemin/vers/growlnotify
+0
+]]]
+
+Il suffit ensuite d'ajouter le code suivant à votre fichier de configuration :
+
+[[[php
+<?php
+$images = '/path/to/atoum/resources/images/logo';
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\image\growl();
+$notifier
+    ->setSuccessImage($images . DIRECTORY_SEPARATOR . 'success.png')
+    ->setFailureImage($images . DIRECTORY_SEPARATOR . 'failure.png')
+;
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
+====Mac OS X Notification Center====OSXNotificationCenter
+
+Cette fonctionnalité nécessite la présence de l'exécutable ##terminal-notifier##. Pour vérifier s'il est disponible, utilisez la commande suivante :
+
+[[[shell
+$ which terminal-notifier && echo $?
+/chemin/vers/terminal-notifier
+0
+]]]
+
+{{{info
+Rendez-vous sur [[la page Github du projet|https://github.com/alloy/terminal-notifier]] pour obtenir plus d'information sur l'installation de ##terminal-notifier##.
+}}}
+
+Il suffit ensuite d'ajouter le code suivant à votre fichier de configuration :
+
+[[[php
+<?php
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\terminal();
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
+Sous OS X, vous avez la possibilité de définir une commande qui sera exécutée lorsque l'utilisateur cliquera sur la notification.
+
+[[[php
+<?php
+$coverage = new atoum\report\fields\runner\coverage\html(
+    'Code coverage',
+    $path = sys_get_temp_dir() . '/coverage_' . time()
+);
+$coverage->setRootUrl('file://' . $path);
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\terminal();
+$notifier->setCallbackCommand('open 'file://' . $path . '/index.html);
+
+$report = $script->AddDefaultReport();
+$report
+    ->addField($coverage, array(atoum\runner::runStop))
+    ->addField($notifier, array(atoum\runner::runStop))
+;
+]]]
+
+L'exemple ci-dessus montre comment ouvrir le rapport de couverture du code lorsque l'utilisateur clique sur la notification.
+
+====Libnotify
+
+Cette fonctionnalité nécessite la présence de l'exécutable ##notify-send##. Pour vérifier s'il est disponible, utilisez la commande suivante :
+
+[[[shell
+$ which notify-send && echo $?
+/chemin/vers/notify-send
+0
+]]]
+
+Il suffit ensuite d'ajouter le code suivant à votre fichier de configuration :
+
+[[[php
+<?php
+$images = '/path/to/atoum/resources/images/logo';
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\image\libnotify();
+$notifier
+    ->setSuccessImage($images . DIRECTORY_SEPARATOR . 'success.png')
+    ->setFailureImage($images . DIRECTORY_SEPARATOR . 'failure.png')
+;
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
 ==Fichier de bootstrap
 
 atoum autorise la définition d'un fichier de ##bootstrap## qui sera exécuté avant chaque méthode de test et qui permet donc d'initialiser l'environnement d'exécution des tests.

@@ -271,6 +271,108 @@ One the tests have been executed, Atoum will generate the code coverage report i
 The calculation of the code coverage percentage as well as the corresponding reporting can significally slow down the tests execution. It can therefore be interesting to not systematically make use of the conrresponding configuration file or to temporarily deactivate them using the -ncc option.
 }}}
 
+===Notifications
+
+atoum is able to warn you when the tests are performed using several notification system: [[Growl|#Growl]], [[Notification Center|#OSXNotificationCenter]], [[Libnotify|#Libnotify]].
+
+====Growl
+
+This feature uses the ##growlnotify## utility. To check if the command is available, run:
+
+[[[shell
+$ which growlnotify && echo $?
+/path/to/growlnotify
+0
+]]]
+
+Then you will have to add the following lines to your configuration file:
+
+[[[php
+<?php
+$images = '/path/to/atoum/resources/images/logo';
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\image\growl();
+$notifier
+    ->setSuccessImage($images . DIRECTORY_SEPARATOR . 'success.png')
+    ->setFailureImage($images . DIRECTORY_SEPARATOR . 'failure.png')
+;
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
+====Mac OS X Notification Center====OSXNotificationCenter
+
+This feature uses the ##terminal-notifier## utility. To check if the command is available, run:
+
+[[[shell
+$ which terminal-notifier && echo $?
+/path/to/terminal-notifier
+0
+]]]
+
+{{{info
+Visit [[the project's Github page|https://github.com/alloy/terminal-notifier]] to get more information on ##terminal-notifier##.
+}}}
+
+Then you will have to add the following lines to your configuration file:
+
+[[[php
+<?php
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\terminal();
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
+On OS X, you can define a command to be executed when the user clicks on the notification.
+
+[[[php
+<?php
+$coverage = new atoum\report\fields\runner\coverage\html(
+    'Code coverage',
+    $path = sys_get_temp_dir() . '/coverage_' . time()
+);
+$coverage->setRootUrl('file://' . $path);
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\terminal();
+$notifier->setCallbackCommand('open 'file://' . $path . '/index.html);
+
+$report = $script->AddDefaultReport();
+$report
+    ->addField($coverage, array(atoum\runner::runStop))
+    ->addField($notifier, array(atoum\runner::runStop))
+;
+]]]
+
+The example above shows how to automatically open the code coverage report when the user clicks on the notification.
+
+====Libnotify
+
+This feature uses the ##notify-send## utility. To check if the command is available, run:
+
+[[[shell
+$ which notify-send && echo $?
+/path/to/notify-send
+0
+]]]
+
+Then you will have to add the following lines to your configuration file:
+
+[[[php
+<?php
+$images = '/path/to/atoum/resources/images/logo';
+
+$notifier = new \mageekguy\atoum\report\fields\runner\result\notifier\image\libnotify();
+$notifier
+    ->setSuccessImage($images . DIRECTORY_SEPARATOR . 'success.png')
+    ->setFailureImage($images . DIRECTORY_SEPARATOR . 'failure.png')
+;
+
+$report = $script->AddDefaultReport();
+$report->addField($notifier, array(atoum\runner::runStop));
+]]]
+
 ==Bootstrap file
 
 Atoum can use a ##bootstrap## file which will be executed before each test method thus allowing the initialization of the tests execution environment.
