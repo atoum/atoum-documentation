@@ -313,7 +313,7 @@ Si vous n’utilisez pas atoum sous la forme d’une archive PHAR, vous trouvere
 Dans le cas contraire, il faut demander à l’archive PHAR d’atoum d’extraire le fichier à l’aide de la commande suivante :
 
 [[[shell
-$ php mageekguy.atoum.phar --extractRessourcesTo path/to/a/directory
+$ php mageekguy.atoum.phar --extractResourcesTo path/to/a/directory
 ]]]
 
 Une fois l’extraction réalisée, le fichier ##atoum.vba## correspondant au plug-in pour VIM sera dans le répertoire ##path/to/a/directory/ressources/vim##.
