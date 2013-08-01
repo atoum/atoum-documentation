@@ -1750,6 +1750,22 @@ $this
 ;
 ]]]
 
+====notContains====stringNotContains
+
+##notContains## vérifie qu’une chaîne de caractère ne contient pas une autre chaîne de caractère donnée.
+
+[[[php
+$string = 'Hello world';
+
+$this
+    ->string($string)
+        ->notContains('php')   // passe
+        ->notContains(';')     // passe
+        ->notContains('ll')    // échoue
+        ->notContains(' ')     // échoue
+;
+]]]
+
 ====hasLength====stringHasLength
 
 ##hasLength## vérifie la taille d’une chaîne de caractères.
@@ -1928,6 +1944,13 @@ $this
 Pour plus d’informations, reportez-vous à la documentation de [[##string::contains##|#stringContains]]
 }}}
 
+====notContains====castToStringNotContains
+
+{{{inheritance
+##notContains## est une méthode héritée de l’asserter ##string##.
+Pour plus d’informations, reportez-vous à la documentation de [[##string::notContains##|#stringNotContains]]
+}}}
+
 ====hasLength====castToStringHasLength
 
 {{{inheritance
@@ -2010,6 +2033,20 @@ Pour plus d’informations, reportez-vous à la documentation de [[##string::mat
 ===hash
 
 C’est l’assertion dédiée aux tests sur les hashs (empreintes numériques).
+
+====contains====hashContains
+
+{{{inheritance
+##contains## est une méthode héritée de l’asserter ##string##.
+Pour plus d’informations, reportez-vous à la documentation de [[##string::contains##|#stringContains]]
+}}}
+
+====notContains====hashNotContains
+
+{{{inheritance
+##notContains## est une méthode héritée de l’asserter ##string##.
+Pour plus d’informations, reportez-vous à la documentation de [[##string::notContains##|#stringNotContains]]
+}}}
 
 ====isEqualTo====hashIsEqualTo
 
@@ -2137,6 +2174,13 @@ La syntaxe utilise les fonctions anonymes (aussi appelées fermetures ou closure
 Pour plus d’informations, reportez-vous à la documentation de [[##string::contains##|#stringContains]]
 }}}
 
+====notContains====outputNotContains
+
+{{{inheritance
+##notContains## est une méthode héritée de l’asserter ##string##.
+Pour plus d’informations, reportez-vous à la documentation de [[##string::notContains##|#stringNotContains]]
+}}}
+
 ====hasLength====outputHasLength
 
 {{{inheritance
@@ -2229,6 +2273,13 @@ C’est l’assertion dédiée aux chaînes de caractères UTF-8.
 {{{inheritance
 ##contains## est une méthode héritée de l’asserter ##string##.
 Pour plus d’informations, reportez-vous à la documentation de [[##string::contains##|#stringContains]]
+}}}
+
+====notContains====utf8StringNotContains
+
+{{{inheritance
+##notContains## est une méthode héritée de l’asserter ##string##.
+Pour plus d’informations, reportez-vous à la documentation de [[##string::notContains##|#stringNotContains]]
 }}}
 
 ====hasLength====utf8StringHasLength
