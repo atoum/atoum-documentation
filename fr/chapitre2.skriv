@@ -3775,6 +3775,13 @@ $databaseClient = new \mock\Database\Client($controller);
 
 {{{info
 Dans l’exemple ci-dessus, le constructeur de la classe ##\Database\Client## n’a aucun argument, nous injectons directement le contrôleur. Dans le cas d’un constructeur ayant des paramètres, il faudra passer le contrôleur en dernier argument, après tous les arguments requis et optionnels.
+
+[[[php
+$controller = new \atoum\mock\controller();
+$controller->__construct = function() {};
+
+$databaseClient = new \mock\Database\Client($arg1, $arg2, $controller);
+]]]
 }}}
 
 ===Tester un bouchon
