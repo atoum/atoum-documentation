@@ -1368,7 +1368,7 @@ $this
                 // ce code lève une exception: throw new \FirstException('Message 1', 42);
                 $myObject->doOneThing('wrongParameter');
             }
-            // ... l'esception est attrapée...
+            // ... l'exception est attrapée...
             catch(\FirstException $e) {
                 // ... puis relancée, encapsulée dans une seconde exception
                 throw new \SecondException('Message 2', 24, $e);
@@ -1614,7 +1614,7 @@ Pour plus d’informations, reportez-vous à la documentation de [[##variable::i
 Pour plus d’informations, reportez-vous à la documentation de [[##variable::isIdenticalTo##|#variableIsIdenticalTo]]
 }}}
 
-====isNotE  mpty====arrayIsNotEmpty
+====isNotEmpty====arrayIsNotEmpty
 
 ##isNotEmpty## vérifie qu’un tableau n’est pas vide.
 
