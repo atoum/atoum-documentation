@@ -2770,7 +2770,7 @@ Reportez-vous à la documentation sur les [[bouchons|#Les-bouchons-mock]] pour o
 
 ====call
 
-##call## permet de spécifier une méthode du mock à tester
+##call## permet de spécifier une méthode du mock à tester, son appel doit être suivi d'un appel à une méthode de vérification d'appel comme ##atLeastOnce##, ##once##, ##exactly##, ...
 
 [[[php
 $mock = new \mock\MyFirstClass;
