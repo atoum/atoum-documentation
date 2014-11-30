@@ -1,6 +1,11 @@
-Output
+# idea & other
 nbproject/
 .gitconfig
-
 .idea/
 atlassian-ide-plugin.xml
+
+# project ignore
+output/
+LinksChecker/
+sia/
+g
