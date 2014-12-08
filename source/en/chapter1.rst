@@ -299,32 +299,14 @@ You will see something like this
    > atoum version nightly-941-201201011548 by Frédéric Hardy (phar:///home/documentation/projects/tests/atoum/mageekguy.atoum.phar/1)
    > PHP path: /usr/bin/php5
    > PHP version:
-   .. _p-h-p-5-3-6-13ubuntu3-3-with-suhosin-patch--cli---built--dec-13-2011-18-37-10:
-   
    > PHP 5.3.6-13ubuntu3.3 with Suhosin-Patch (cli) (built: Dec 13 2011 18:37:10)
-   ==============================================================================
-   .. _copyright--c--1997-2011-the-p-h-p-group:
-   
    > Copyright (c) 1997-2011 The PHP Group
-   =======================================
-   .. _zend-engine-v2-3-0--copyright--c--1998-2011-zend-technologies:
-   
    > Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
-   ===============================================================
-   .. _with-xdebug-v2-1-2--copyright--c--2002-2011--by-derick-rethans:
-   
    >     with Xdebug v2.1.2, Copyright (c) 2002-2011, by Derick Rethans
-   ====================================================================
    > tests\units\HelloTheWorld...
    [S___________________________________________________________][1/1]
-   .. _test-duration--0-01-second:
-   
    > Test duration: 0.01 second.
-   =============================
-   .. _memory-usage--0-00-mb:
-   
    > Memory usage: 0.00 Mb.
-   ========================
    > Total test duration: 0.01 second.
    > Total test memory usage: 0.00 Mb.
    > Code coverage value: 100.00%
@@ -343,8 +325,8 @@ Rule of Thumb
 ~~~~~~~~~~~~~
 The basics when you’re testing things using atoum are the following :
 
-*    Tell atoum what you want to work on (a variable, an object, a string, an integer, …)
-*    Tell atoum the state the element is expected to be in (is equal to, is null, exists, …).
+* Tell atoum what you want to work on (a variable, an object, a string, an integer, …)
+* Tell atoum the state the element is expected to be in (is equal to, is null, exists, …).
 
 .. _using-atoum-with-your-favorite-i-d-e:
 
@@ -354,7 +336,7 @@ Using atoum with your favorite IDE
 .. _sublime-text-2:
 
 Sublime Text 2
---------------
+~~~~~~~~~~~~~~
 
 A `SublimeText 2 plugin <https://github.com/toin0u/Sublime-atoum>`_ enables you to launch tests and see the results directly in the editor.
 
@@ -363,7 +345,7 @@ Required instructions to install the plugin are available here `the author's blo
 .. _v-i-m:
 
 VIM
----
+~~~
 
 atoum is bundled with a plugin dedicated to VIM.
 
@@ -442,3 +424,135 @@ If you want to know more about the plugin, you can use the embedded help in VIM 
 .. code-block:: vim
 
    :help atoum
+
+Automatically open failing tests
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+atoum is able to automatically open failing tests after suite has run. Here are the supported editors:
+
+* :ref:`macvim <macvim-anchor>` (Mac OS X)
+* :ref:`gvim <gvim-anchor>` (Unix)
+* :ref:`PhpStorm <php-storm>` (Mac OS X/Unix)
+* :ref:`gedit <gedit-anchor>` (Unix)
+
+To use this feature you will have to edit your `configuration file <chapter3.html#configuration-files>`_:
+
+.. _macvim-anchor:
+
+macvim
+^^^^^^
+
+.. code-block:: php
+
+   <?php
+   use
+       mageekguy\atoum,
+       mageekguy\atoum\report\fields\runner\failures\execute\macos
+   ;
+
+   $stdOutWriter = new atoum\writers\std\out();
+   $cliReport = new atoum\reports\realtime\cli();
+   $cliReport->addWriter($stdOutWriter);
+
+   $cliReport->addField(new macos\macvim());
+
+   $runner->addReport($cliReport);
+
+
+.. _gvim-anchor:
+
+gvim
+^^^^
+
+.. code-block:: php
+
+   <?php
+   use
+       mageekguy\atoum,
+       mageekguy\atoum\report\fields\runner\failures\execute\unix
+   ;
+
+   $stdOutWriter = new atoum\writers\std\out();
+   $cliReport = new atoum\reports\realtime\cli();
+   $cliReport->addWriter($stdOutWriter);
+
+   $cliReport->addField(new unix\gvim());
+
+   $runner->addReport($cliReport);
+
+
+.. _php-storm:
+
+PhpStorm
+^^^^^^^^
+
+If you are on Mac OS X, use the following configuration:
+
+.. code-block:: php
+
+   <?php
+   use
+       mageekguy\atoum,
+       mageekguy\atoum\report\fields\runner\failures\execute\macos
+   ;
+
+   $stdOutWriter = new atoum\writers\std\out();
+   $cliReport = new atoum\reports\realtime\cli();
+   $cliReport->addWriter($stdOutWriter);
+
+   $cliReport
+       // If PhpStorm is installed in in /Applications
+       ->addField(new macos\phpstorm())
+
+       // If PhpStorm is installed anywhere else
+       // ->addField(
+       //     new macos\phpstorm(
+       //         '/path/to/PhpStorm.app/Contents/MacOS/webide'
+       //     )
+       // )
+   ;
+
+   $runner->addReport($cliReport);
+
+
+On Unix, use the following configuration:
+
+.. code-block:: php
+
+   <?php
+   use
+       mageekguy\atoum,
+       mageekguy\atoum\report\fields\runner\failures\execute\unix
+   ;
+
+   $stdOutWriter = new atoum\writers\std\out();
+   $cliReport = new atoum\reports\realtime\cli();
+   $cliReport->addWriter($stdOutWriter);
+
+   $cliReport
+       ->addField(
+           new unix\phpstorm('/chemin/vers/PhpStorm/bin/phpstorm.sh')
+       )
+   ;
+
+   $runner->addReport($cliReport);
+
+.. _gedit-anchor:
+
+gedit
+^^^^^
+
+.. code-block:: php
+
+   <?php
+   use
+       mageekguy\atoum,
+       mageekguy\atoum\report\fields\runner\failures\execute\unix
+   ;
+
+   $stdOutWriter = new atoum\writers\std\out();
+   $cliReport = new atoum\reports\realtime\cli();
+   $cliReport->addWriter($stdOutWriter);
+
+   $cliReport->addField(new unix\gedit());
+
+   $runner->addReport($cliReport);

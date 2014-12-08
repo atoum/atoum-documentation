@@ -312,32 +312,14 @@ Vous devriez voir quelque chose comme ça :
    $ php vendor/mageekguy.atoum.phar -f src/Vendor/Project/tests/units/HelloWorld.php
    > PHP path: /usr/bin/php
    > PHP version:
-   .. _p-h-p-5-4-7--cli---built---sep-13-2012-04-24-47:
-
    > PHP 5.4.7 (cli) (built : Sep 13 2012 04:24:47)
-   ================================================
-   .. _copyright--c--1997-2012-the-p-h-p-group:
-
    > Copyright (c) 1997-2012 The PHP Group
-   =======================================
-   .. _zend-engine-v2-4-0--copyright--c--1998-2012-zend-technologies:
-
    > Zend Engine v2.4.0, Copyright (c) 1998-2012 Zend Technologies
-   ===============================================================
-   .. _with-xdebug-v2-2-1--copyright--c--2002-2012--by-derick-rethans:
-
    >     with Xdebug v2.2.1, Copyright (c) 2002-2012, by Derick Rethans
-   ====================================================================
    > Vendor\Project\tests\units\HelloWorld...
    [S___________________________________________________________][1/1]
-   .. _test-duration---0-02-second:
-
    > Test duration : 0.02 second.
-   ==============================
-   .. _memory-usage---0-00-mb:
-
    > Memory usage : 0.00 Mb.
-   =========================
    > Total test duration: 0.02 second.
    > Total test memory usage: 0.00 Mb.
    > Code coverage value: 100.00%
@@ -472,7 +454,7 @@ atoum est capable d’ouvrir automatiquement les fichiers des tests en échec à
 * :ref:`PhpStorm <php-storm>` (Mac OS X/Unix)
 * :ref:`gedit <gedit-anchor>` (Unix)
 
-Pour utiliser cette fonctionnalité, vous devrez modifier le `fichier de configuration <chapitre3.html#Fichier-de-configuration>`_ de atoum :
+Pour utiliser cette fonctionnalité, vous devrez modifier le `fichier de configuration <chapitre3.html#fichier-de-configuration>`_ de atoum :
 
 .. _macvim-anchor:
 
