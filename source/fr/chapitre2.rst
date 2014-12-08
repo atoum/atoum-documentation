@@ -949,6 +949,9 @@ isInstanceOf
 .. note::
    Les noms des classes et des interfaces doivent être absolus, car les éventuelles importations d’espace de nommage ne sont pas prises en compte.
 
+.. hint::
+   Notez qu'avec PHP ``>= 5.5`` vous pouvez utiliser le mot-clé ``class`` pour obtenir les noms de classe absolus, par exemple ``$this->object($foo)->isInstanceOf(FooClass::class)``.
+
 
 .. _object-is-not-callable:
 
@@ -3804,7 +3807,7 @@ isWrite
 Aide à l’écriture
 -----------------
 
-Il est possible d’écrire des tests unitaires avec atoum de plusieurs manières, et l’une d’elle est d’utiliser des mots-clefs tels que ``if``, ``and`` ou bien encore ``then``, ``when`` ou ``assert``.
+Il est possible d’écrire des tests unitaires avec atoum de plusieurs manières, et l’une d’elle est d’utiliser des mots-clefs tels que ``given``, ``if``, ``and`` ou bien encore ``then``, ``when`` ou ``assert``.
 
 .. _if--and--then:
 
@@ -3817,9 +3820,12 @@ L’utilisation de ces mots-clefs est très intuitive :
 
    <?php
    $this
-       ->if($computer = new computer()))
-       ->and($computer->setFirstOperand(2))
-       ->and($computer->setSecondOperand(2))
+       ->given($computer = new computer()))
+       ->if($computer->prepare())
+       ->and(
+           $computer->setFirstOperand(2),
+           $computer->setSecondOperand(2)
+       )
        ->then
            ->object($computer->add())
                ->isIdenticalTo($computer)
@@ -3829,7 +3835,7 @@ L’utilisation de ces mots-clefs est très intuitive :
 
 Il est important de noter ces mots-clefs n’apporte rien techniquement ou fonctionnellement parlant, car ils n’ont pas d’autre but que de faciliter la compréhension du test et donc sa maintenance en y ajoutant de la sémantique compréhensible facilement par l’Humain et plus particulièrement un développeur.
 
-Ainsi, ``if`` et ``and`` permettent de définir les conditions préalables pour que les assertions qui suivent le mot-clef ``then`` passent avec succès.
+Ainsi, ``given``, ``if`` et ``and`` permettent de définir les conditions préalables pour que les assertions qui suivent le mot-clef ``then`` passent avec succès.
 
 Cependant, il n’y a pas de grammaire régissant l’ordre d’utilisation de ces mots-clefs et aucune vérification syntaxique n’est effectuée par atoum.
 
@@ -3874,7 +3880,7 @@ Le test ne sera pas plus lent ou plus rapide à exécuter et il n’y a aucun av
 when
 ~~~~
 
-En plus de ``if``, ``and`` et ``then``, il existe également d’autres mots-clefs.
+En plus de ``given``, ``if``, ``and`` et ``then``, il existe également d’autres mots-clefs.
 
 L’un d’entre eux est ``when``. Il dispose d’une fonctionnalité spécifique introduite pour contourner le fait qu’il est illégal d’écrire en PHP le code suivant :
 
@@ -3910,7 +3916,7 @@ Pour résoudre ce problème, le mot-clef ``when`` est capable d’interpréter l
            ->isZero()
    ;
 
-Bien évidemment, si ``when`` ne reçoit pas de fonction anonyme en argument, il se comporte exactement comme if, and et then, à savoir qu’il ne fait absolument rien fonctionnellement parlant.
+Bien évidemment, si ``when`` ne reçoit pas de fonction anonyme en argument, il se comporte exactement comme ``given``, ``if``, ``and`` et ``then``, à savoir qu’il ne fait absolument rien fonctionnellement parlant.
 
 .. _assert-anchor:
 
@@ -3977,7 +3983,7 @@ Pour remédier à ce problème, vous pouvez remettre à zéro un mock de 2 mani�
 
 Ces méthodes effacent la mémoire du contrôleur, il est donc possible d’écrire l’assertion suivante comme si le bouchon n’avait jamais été utilisé.
 
-Le mot-clef ``assert`` permet de se passer de l’appel explicite à ``resetCalls()`` et de plus il provoque l’effacement de la mémoire de l’ensemble des adaptateurs et des contrôleurs de bouchon définis au moment de son utilisation.
+Le mot-clef ``assert`` permet de se passer de l’appel explicite à ``resetCalls()`` et de plus il provoque l’effacement de la mémoire de l’ensemble des adaptateurs et des contrôleurs de mock définis au moment de son utilisation.
 
 Grâce à lui, il est donc possible d’écrire le test précédent d’une façon plus simple et plus lisible, d’autant qu’il est possible de passer une chaîne de caractère à assert afin d’expliquer le rôle des assertions suivantes :
 
@@ -4016,6 +4022,7 @@ Lorsqu’un développeur fait du développement piloté par les tests, il travai
 # il exécute le test qu’il vient de créer ;
 # il écrit le code permettant au test de passer avec succès ;
 # il modifie ou complète son test et repars à l’étape 2.
+
 Concrètement, cela signifie qu’il doit :
 
 * créer son code dans son éditeur favori ;
@@ -4040,32 +4047,14 @@ Une fois les tests terminés, si les tests ont été passés avec succès par le
    > atoum version DEVELOPMENT by Frédéric Hardy (/Users/fch/Atoum)
    > PHP path: /usr/local/bin/php
    > PHP version:
-   .. _p-h-p-5-3-8--cli---built--sep-21-2011-23-14-37:
-
    > PHP 5.3.8 (cli) (built: Sep 21 2011 23:14:37)
-   ===============================================
-   .. _copyright--c--1997-2011-the-p-h-p-group:
-
    > Copyright (c) 1997-2011 The PHP Group
-   =======================================
-   .. _zend-engine-v2-3-0--copyright--c--1998-2011-zend-technologies:
-
    > Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
-   ===============================================================
-   .. _with-xdebug-v2-1-1--copyright--c--2002-2011--by-derick-rethans:
-
    >     with Xdebug v2.1.1, Copyright (c) 2002-2011, by Derick Rethans
-   ====================================================================
    > mageekguy\atoum\tests\units\adapter...
    [S___________________________________________________________][1/1]
-   .. _test-duration--0-02-second:
-
    > Test duration: 0.02 second.
-   =============================
-   .. _memory-usage--0-25-mb:
-
    > Memory usage: 0.25 Mb.
-   ========================
    > Total test duration: 0.02 second.
    > Total test memory usage: 0.25 Mb.
    > Code coverage value: 100.00%
@@ -4085,41 +4074,20 @@ Dans le cas où le code ne passe pas les tests avec succès, c’est-à-dire si 
    > atoum version DEVELOPMENT by Frédéric Hardy (/Users/fch/Atoum)
    > PHP path: /usr/local/bin/php
    > PHP version:
-   .. _p-h-p-5-3-8--cli---built--sep-21-2011-23-14-37:
-
    > PHP 5.3.8 (cli) (built: Sep 21 2011 23:14:37)
-   ===============================================
-   .. _copyright--c--1997-2011-the-p-h-p-group:
-
    > Copyright (c) 1997-2011 The PHP Group
-   =======================================
-   .. _zend-engine-v2-3-0--copyright--c--1998-2011-zend-technologies:
-
    > Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
-   ===============================================================
-   .. _with-xdebug-v2-1-1--copyright--c--2002-2011--by-derick-rethans:
-
    >     with Xdebug v2.1.1, Copyright (c) 2002-2011, by Derick Rethans
-   ====================================================================
    > mageekguy\atoum\tests\units\adapter...
    [F___________________________________________________________][1/1]
-   .. _test-duration--0-00-second:
-
    > Test duration: 0.00 second.
-   =============================
-   .. _memory-usage--0-00-mb:
-
    > Memory usage: 0.00 Mb.
-   ========================
    > Total test duration: 0.00 second.
    > Total test memory usage: 0.00 Mb.
    > Running duration: 0.17 second.
    Failure (1 test, 0 method, 1 failure, 0 error, 0 exception) !
    > There is 1 failure:
-   .. _mageekguy-atoum-tests-units-adapter--test--call:
-
    > mageekguy\atoum\tests\units\adapter::test__call():
-   ====================================================
    In file /Users/fch/Atoum/tests/units/classes/adapter.php on line 17, mageekguy\atoum\asserters\string::isEqualTo() failed: strings are not equals
    -Reference
    +Data
@@ -4136,7 +4104,7 @@ Le développeur pourra alors dépiler les problèmes et rejouer les tests en err
 
 De plus, une fois que tous les tests en échec passeront à nouveau avec succès, atoum exécutera automatiquement la totalité de la suite de tests afin de détecter les éventuelles régressions introduites par la ou les corrections effectuées par le développeur.
 
-Bien évidemment, le mode ``loop`` ne prend en compte que `le ou les fichiers de tests unitaires lancés <chapitre3.html#Fichiers-a-executer>`_ par atoum.
+Bien évidemment, le mode ``loop`` ne prend en compte que `le ou les fichiers de tests unitaires lancés <chapitre3.html#fichiers-a-executer>`_ par atoum.
 
 
 .. _le-mode-debug:
@@ -4146,7 +4114,7 @@ Le mode debug
 
 Parfois, un test ne passe pas et il est difficile d’en découvrir la raison.
 
-Dans ce cas, l’une des techniques possibles pour remédier au problème est de tracer le comportement du code concerné, soit directement au cœur de la classe testée à l’aide de fonctions du type de ``var_dump()`` ou ``print_r()``, soit au niveau du test unitaire.
+Dans ce cas, l’une des techniques possibles pour remédier au problème est de tracer le comportement du code concerné, soit directement au cœur de la classe testée à l’aide d'un déboggueur ou de fonctions du type de ``var_dump()`` ou ``print_r()``, soit au niveau du test unitaire.
 
 Et il se trouve que atoum dispose d’un certain nombre d’outils pour faciliter la tâche du développeur dans ce dernier contexte.
 

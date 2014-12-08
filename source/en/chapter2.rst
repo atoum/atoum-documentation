@@ -944,6 +944,9 @@ isInstanceOf
 .. note::
    Classes and interfaces names have to be absolute, because namespace import are not taken into account.
 
+.. hint::
+   Note that on PHP ``>= 5.5`` you can use the ``class`` keyword to get fully qualified class names, for example ``$this->object($foo)->isInstanceOf(FooClass::class)``.
+
 
 .. _object-is-not-callable:
 
@@ -1645,7 +1648,7 @@ This is the asserter for exceptions.
    <?php
    $this
        ->exception(
-           function() use($myObject) {
+           function($test) use($myObject) {
                // this throws an exception: throw new \Exception;
                $myObject->doOneThing('wrongParameter');
            }
@@ -3787,7 +3790,7 @@ isWrite
 Writing help
 ------------
 
-There are several ways to write unit tests with atoum, and one of them is to use keywords like ``if``, ``and`` or ``then``, ``when`` or ``assert``.
+There are several ways to write unit tests with atoum, and one of them is to use keywords like ``given``, ``if``, ``and`` or ``then``, ``when`` or ``assert``.
 
 .. _if--and--then:
 
@@ -3800,9 +3803,12 @@ Usage of this keywords is really intuitive:
 
    <?php
    $this
-       ->if($computer = new computer()))
-       ->and($computer->setFirstOperand(2))
-       ->and($computer->setSecondOperand(2))
+       ->given($computer = new computer()))
+       ->if($computer->prepare())
+       ->and
+           $computer->setFirstOperand(2),
+           $computer->setSecondOperand(2)
+       )
        ->then
            ->object($computer->add())
                ->isIdenticalTo($computer)
@@ -3810,9 +3816,9 @@ Usage of this keywords is really intuitive:
                ->isEqualTo(4)
    ;
 
-It is important to note that theses keywords do change anything technically or functionally. Their only goal is to ease the test comprehension, which next developers will be thankful for :).
+It is important to note that theses keywords do not change anything technically or functionally. Their only goal is to ease the test comprehension, which next developers will be thankful for :).
 
-Thereby, ``if`` et ``and``  let you define the prior conditions so that the assertions that follow the ``then`` keyword pass.
+Thereby, ``given``, ``if`` et ``and``  let you define the prior conditions so that the assertions that follow the ``then`` keyword pass.
 
 However, there is no grammar defining the order these keywords are used, and no syntax check is done by atoum.
 
@@ -3857,7 +3863,7 @@ There is not speed difference, the only important thing is to chose one way of d
 when
 ~~~~
 
-In addition to ``if``, ``and`` and ``then``, there are other keywords.
+In addition to ``given``, ``if``, ``and`` and ``then``, there are other keywords.
 
 One of them is ``when``. It adds a feature to get around the fact that it is forbidden to write the following code in PHP:
 
@@ -3893,7 +3899,7 @@ To fix this problem the ``when`` keyword is capable of evaluating the anonymous 
            ->isZero()
    ;
 
-Of course, if ``when`` does not receive any anonymous function, it will behave exactly like ``if``, ``and`` and ``then``.
+Of course, if ``when`` does not receive any anonymous function, it will behave exactly like ``given``, ``if``, ``and`` and ``then``.
 
 .. _assert-anchor:
 
@@ -3985,9 +3991,198 @@ Thanks to this feature, it is possible to write the previous test in a more read
                        ->once()
    ;
 
-The string will be used by atoum in atoum generated messages if one of the assertions fail.
+The string will be used by atoum in atoum generated messages if one of the assertions fails.
 
-.. _mocks-anchor:
+.. _the-loop-mode:
 
-Mocks
------
+The loop mode
+------------
+
+When a developer works using TDD, he uses the following workflow:
+
+# he start by writing a test for a piece of code to be written
+# he runs the test which fails
+# he writes some code to make the test pass
+# he edits the test and continues with step 2.
+
+This means he has to:
+
+* write the test in his editor
+* quit his editor to start the command to run the test
+* get back to his editor to write some code
+* get back to the terminal to restart the command
+* get back to his editor to write some code
+* ...
+
+Here we can spot some steps repeated until the feature is fully developed.
+
+However, this cycle is complex and requires many switches between softwares and recurrent typing of the same command to start the tests.
+
+atoum provides a loop mode available using the ``-l`` or ``--loop`` arguments on the command line. This will allow the developer to work without worrying about restarting the command.
+
+Once test have run, if they are all passing, atoum will stay in pause:
+
+. code-block:: shell
+
+   $ php tests/units/classes/adapter.php -l
+   > atoum version DEVELOPMENT by Frédéric Hardy (/Users/fch/Atoum)
+   > PHP path: /usr/local/bin/php
+   > PHP version:
+   > PHP 5.3.8 (cli) (built: Sep 21 2011 23:14:37)
+   > Copyright (c) 1997-2011 The PHP Group
+   > Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
+   >     with Xdebug v2.1.1, Copyright (c) 2002-2011, by Derick Rethans
+   > mageekguy\atoum\tests\units\adapter...
+   [S___________________________________________________________][1/1]
+   > Test duration: 0.02 second.
+   > Memory usage: 0.25 Mb.
+   > Total test duration: 0.02 second.
+   > Total test memory usage: 0.25 Mb.
+   > Code coverage value: 100.00%
+   > Running duration: 0.16 second.
+   Success (1 test, 0 method, 2 assertions, 0 error, 0 exception) !
+   Press <Enter> to reexecute, press any other key to stop...
+
+If the developer presses anything but ``Enter``, atoum will terminate.
+
+Otherwise atoum will restart the same tests without any other action from the developer.
+
+If some tests do not pass, some assertions failed, errors were raised or exceptions were thrown, atoum will also stay in pause:
+
+.. code-block:: shell
+
+   $ php tests/units/classes/adapter.php -l
+   > atoum version DEVELOPMENT by Frédéric Hardy (/Users/fch/Atoum)
+   > PHP path: /usr/local/bin/php
+   > PHP version:
+   > PHP 5.3.8 (cli) (built: Sep 21 2011 23:14:37)
+   > Copyright (c) 1997-2011 The PHP Group
+   > Zend Engine v2.3.0, Copyright (c) 1998-2011 Zend Technologies
+   >     with Xdebug v2.1.1, Copyright (c) 2002-2011, by Derick Rethans
+   > mageekguy\atoum\tests\units\adapter...
+   [F___________________________________________________________][1/1]
+   > Test duration: 0.00 second.
+   > Memory usage: 0.00 Mb.
+   > Total test duration: 0.00 second.
+   > Total test memory usage: 0.00 Mb.
+   > Running duration: 0.17 second.
+   Failure (1 test, 0 method, 1 failure, 0 error, 0 exception) !
+   > There is 1 failure:
+   > mageekguy\atoum\tests\units\adapter::test__call():
+   In file /Users/fch/Atoum/tests/units/classes/adapter.php on line 17, mageekguy\atoum\asserters\string::isEqualTo() failed: strings are not equals
+   -Reference
+   +Data
+   @@ -1 +1 @@
+   -string(13) "4ea0354cd717c"
+   +string(32) "19798c230d5462b3bdae194f364feffa"
+   Press <Enter> to reexecute, press any other key to stop...
+
+Here again, if the developer presses anything but ``Enter`` atoum will terminate.
+
+However, pressing ``Enter`` will make atoum restart only failing tests until they pass again.
+
+When everything get back to green, atoum will restart the whole test suite ensuring that fixing fails did not broke anything else.
+
+Of course, the loop mode will only run `the selected test files <chapter3.html#files-to-execute>`_ par atoum.
+
+.. _the-debug-mode:
+
+The debug mode
+-------------
+
+Sometimes tests fail and it's hard to find why.
+
+In this case, you can probably use a debugger or functions like ``var_dump()`` or ``print_r``, or you can debug directly in unit tests.
+
+atoum provides some tools to help you in this process, debugging directly in unit tests.
+
+Those tools are only available when you run atoum and enable the debug mode using the ``--debug`` command line argument, this is to avoid unexpected debug output when running in standard mode.
+
+When the developer enables the debug mode, he gains access to three methods:
+
+* ``dump()`` to dump the content of a variable
+* ``stop()`` to stop a running test
+* ``executeOnFailure()`` to set a closure to be executed when an assertion fails
+
+Those three method are accessible through the atoum fluent interface.
+
+dump
+~~~~
+
+The ``dump()`` method can be used as follow:
+
+.. code-block:: php
+
+   <?php
+   $this
+       ->if($foo = new foo())
+       ->then
+           ->object($foo->setBar($bar = new bar()))
+               ->isIdenticalTo($foo)
+           ->dump($foo->getBar())
+   ;
+
+When running this test, the ``foo::getBar()`` return value will be printed on the standard output.
+
+You can also pass multiple arguments to the ``dump()`` method:
+
+.. code-block:: php
+
+   <?php
+   $this
+       ->if($foo = new foo())
+       ->then
+           ->object($foo->setBar($bar = new bar()))
+               ->isIdenticalTo($foo)
+           ->dump($foo->getBar(), $bar)
+   ;
+
+.. _stop-anchor:
+
+stop
+~~~~
+
+The ``stop()``method is also easy to use:
+
+.. code-block:: php
+
+   <?php
+   $this
+       ->if($foo = new foo())
+       ->then
+           ->object($foo->setBar($bar = new bar()))
+               ->isIdenticalTo($foo)
+           ->stop() // The test will stop here if --debug is used
+           ->object($foo->getBar())
+               ->isIdenticalTo($bar)
+   ;
+
+.. _execute-on-failure:
+
+executeOnFailure
+~~~~~~~~~~~~~~~~
+
+The ``executeOnFailure()`` is really mighty and also easy to use.
+
+In fact she takes a closure as its single argument and run it only if any assertion fails:
+
+.. code-block:: php
+
+   <?php
+   $this
+       ->if($foo = new foo())
+       ->executeOnFailure(
+           function() use ($foo) {
+               var_dump($foo);
+           }
+       )
+       ->then
+           ->object($foo->setBar($bar = new bar()))
+               ->isIdenticalTo($foo)
+           ->object($foo->getBar())
+               ->isIdenticalTo($bar)
+   ;
+
+In the previous example, unlike with ``dump()`` which always prints the value, the variable ``foo`` will only be printed if any of the following assertion fails.
+
+Of course you can call ``executeOnFailure()`` several times in a test to execute multiple closures when an assertion fails.
