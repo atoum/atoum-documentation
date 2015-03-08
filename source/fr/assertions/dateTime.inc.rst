@@ -3,7 +3,7 @@
 dateTime
 ********
 
-C'est l'assertion dédiée à l'objet ```DateTime <http://php.net/datetime>`_``.
+C'est l'assertion dédiée à l'objet ```DateTime <http://php.net/datetime>```.
 
 Si vous essayez de tester une variable qui n'est pas un objet ``DateTime`` (ou une classe qui l'étend) avec cette assertion, cela échouera.
 
