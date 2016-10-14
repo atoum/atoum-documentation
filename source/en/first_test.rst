@@ -1,12 +1,17 @@
 
 .. _first-tests:
 
+
 First Tests
 ##################
 
 You need to write a test class for each tested class.
 
 Imagine that you want to test the traditional class ``HelloWorld``, then you must create the test class ``test\units\HelloWorld``.
+
+Warning
+
+If you would like to follow the first steps with atoum it is recommended to install the extension atoum-stubs. Using an IDE will issue a warning.
 
 .. note::
 	atoum uses namespaces. For example, to test the ``Vendor\Project\HelloWorld`` class, you must create the class ``Vendor\Project\tests\units\HelloWorld`` or ``tests\units\Vendor\Project\HelloWorld``.
