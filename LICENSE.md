@@ -1,4 +1,4 @@
-This documentation is under the licence CC by-nc-sa 4.0
+This documentation is under the license CC by-nc-sa 4.0
 
 You can read it on [this page](https://creativecommons.org/licenses/by-nc-sa/4.0/).
 
