@@ -35,6 +35,10 @@ files:
     dest        : '/source/en/asserters/class.inc.txt'
     translation : '/source/%two_letters_code%/asserters/%file_name%.rst'
   -
+    source      : '/source/en/asserters/constant.inc.rst'
+    dest        : '/source/en/asserters/constant.inc.txt'
+    translation : '/source/%two_letters_code%/asserters/%file_name%.rst'
+  -
     source      : '/source/en/asserters/dateInterval.inc.rst'
     dest        : '/source/en/asserters/dateInterval.inc.txt'
     translation : '/source/%two_letters_code%/asserters/%file_name%.rst'
