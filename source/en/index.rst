@@ -38,5 +38,6 @@ You can find more information on the `official website <http://atoum.org/>`_.
    cookbook
    extensions
    ide
+   faq
    contribute
    licences

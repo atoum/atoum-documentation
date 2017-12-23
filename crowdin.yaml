@@ -222,6 +222,10 @@ files:
     dest        : '/source/en/first_test.txt'
     translation : '/source/%two_letters_code%/%file_name%.rst'
   -
+    source      : '/source/en/faq.rst'
+    dest        : '/source/en/faq.txt'
+    translation : '/source/%two_letters_code%/%file_name%.rst'
+  -
     source      : '/source/en/fine_tuning.rst'
     dest        : '/source/en/fine_tuning.txt'
     translation : '/source/%two_letters_code%/%file_name%.rst'
