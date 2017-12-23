@@ -23,28 +23,29 @@ This is the asserters inheritance tree:
         |-- error
         |-- mock
         |-- stream
-        `-- variable
-            |-- array
-            |    `-- castToArray
-            |-- boolean
-            |-- class
-            |    `-- testedClass
-            |-- integer
-            |   |-- float
-            |   `-- sizeOf
-            |-- object
-            |   |-- dateInterval
-            |   |-- dateTime
-            |   |   `-- mysqlDateTime
-            |   |-- exception
-            |   `-- iterator
-            |       `-- generator
-            |-- resource
-            `-- string
-                |-- castToString
-                |-- hash
-                |-- output
-                `-- utf8String
+        |-- variable
+        |   |-- array
+        |   |    `-- castToArray
+        |   |-- boolean
+        |   |-- class
+        |   |    `-- testedClass
+        |   |-- integer
+        |   |   |-- float
+        |   |   `-- sizeOf
+        |   |-- object
+        |   |   |-- dateInterval
+        |   |   |-- dateTime
+        |   |   |   `-- mysqlDateTime
+        |   |   |-- exception
+        |   |   `-- iterator
+        |   |       `-- generator
+        |   |-- resource
+        |   `-- string
+        |       |-- castToString
+        |       |-- hash
+        |       |-- output
+        |       `-- utf8String
+        `-- function
 
 
 .. note::
@@ -71,6 +72,7 @@ This is the asserters inheritance tree:
 .. include:: asserters/exception.inc.rst
 .. include:: asserters/extension.inc.rst
 .. include:: asserters/float.inc.rst
+.. include:: asserters/function.inc.rst
 .. include:: asserters/generator.inc.rst
 .. include:: asserters/hash.inc.rst
 .. include:: asserters/integer.inc.rst
@@ -84,6 +86,5 @@ This is the asserters inheritance tree:
 .. include:: asserters/string.inc.rst
 .. include:: asserters/utf8String.inc.rst
 .. include:: asserters/variable.inc.rst
-
 
 .. include:: asserters/ztips.inc.rst

@@ -22,7 +22,7 @@ It's the assertion dedicated to mocks.
 call
 ====
 
-``call`` let you specify which method of mock to check, it call must be followed by a call to one of the following verification method like `atLeastOnce`_, `once/twice/thrice`_, `exactly`_, etc...
+``call`` let you specify which method of mock to check, it call must be followed by a call to one of the following verification method like :ref:`atLeastOnce <at-least-once>`, :ref:`once/twice/thrice <once-twice-thrice>`, :ref:`exactly <exactly-anchor>`, etc...
 
 .. code-block:: php
 
