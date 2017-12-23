@@ -38,6 +38,9 @@ We can easily retrieve the last exception with ``$this->exception``.
    $this->exception->hasCode(42); // passes
    $this->exception->hasMessage('erreur'); // passes
 
+.. note::
+   Before atoum 3.0.0, if you need to make assertion if was required to add ``atoum\test $test`` as argument of the closure. After 3.0.0, you can simply use $this inside the closure to make some assertion.
+
 .. _has-code:
 
 hasCode
