@@ -34,7 +34,7 @@ The second option is the easiest for most people.
 1. Set the language in conf.py (see the [language list](http://www.sphinx-doc.org/en/stable/config.html#confval-language))
 1. Push your translation to Crowdin
 
-## Building the documentation
+## Building the documentation for the project :
 
 ### Usage
 
