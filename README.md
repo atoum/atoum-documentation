@@ -91,6 +91,7 @@ This documentation is under the CC by-nc-sa 4.0 licence. You can find more infor
 
 ### I have a problem, where can I find help?
 You can check our IRC channel [##atoum on freenode](https://webchat.freenode.net/?channels=##atoum)
+
 To learn more about the freenode IRC network, the freenode #live conference and other freenode projects head over to  [our website.](https://freenode.net/)
 
 ### What thing should not be translated
