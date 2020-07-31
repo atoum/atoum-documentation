@@ -1,48 +1,123 @@
+---
+description: Hey its cloud time.
+---
+
 # Translation
+
+{% api-method method="get" host="https://api.cakes.com" path="/v1/cakes/:id" %}
+{% api-method-summary %}
+
+{% endapi-method-summary %}
+
+{% api-method-description %}
+
+{% endapi-method-description %}
+
+{% api-method-spec %}
+{% api-method-request %}
+{% api-method-path-parameters %}
+{% api-method-parameter name="id" type="string" %}
+ID of the cake to get, for free of course.
+{% endapi-method-parameter %}
+{% endapi-method-path-parameters %}
+
+{% api-method-headers %}
+{% api-method-parameter name="Authentication" type="string" required=true %}
+Authentication token to track down who is emptying our stocks.
+{% endapi-method-parameter %}
+{% endapi-method-headers %}
+
+{% api-method-query-parameters %}
+{% api-method-parameter name="recipe" type="string" %}
+The API will do its best to find a cake matching the provided recipe.
+{% endapi-method-parameter %}
+
+{% api-method-parameter name="gluten" type="boolean" %}
+Whether the cake should be gluten-free or not.
+{% endapi-method-parameter %}
+{% endapi-method-query-parameters %}
+{% endapi-method-request %}
+
+{% api-method-response %}
+{% api-method-response-example httpCode=200 %}
+{% api-method-response-example-description %}
+Cake successfully retrieved.
+{% endapi-method-response-example-description %}
+
+```
+{    "name": "Cake's name",    "recipe": "Cake's recipe name",    "cake": "Binary cake"}
+```
+{% endapi-method-response-example %}
+
+{% api-method-response-example httpCode=404 %}
+{% api-method-response-example-description %}
+Could not find a cake matching this query.
+{% endapi-method-response-example-description %}
+
+```
+{    "message": "Ain't no cake like that."}
+```
+{% endapi-method-response-example %}
+{% endapi-method-response %}
+{% endapi-method-spec %}
+{% endapi-method %}
+
 [![Crowdin](https://d322cqt584bo4o.cloudfront.net/atoum/localized.svg)](https://crowdin.com/project/atoum)
+
+
 
 ## Information for Translators
 
-We use the Crowdin translation platform (see our [project on Crowdin ](https://crowdin.com/project/atoum)) and their [client](https://crowdin.com/page/cli-tool) to manage translations.
+We use the Crowdin translation platform \(see our [project on Crowdin ](https://crowdin.com/project/atoum)\) and their [client](https://crowdin.com/page/cli-tool) to manage translations.
 
 ### Usage
+
 In command line mode, sending source files is done with this command:
 
-	crowdin-cli upload source
+```text
+crowdin-cli upload source
+```
 
 Downloading the existing translations is done with this command:
 
-	crowdin-cli download
+```text
+crowdin-cli download
+```
 
 ## Translating pages
-You can directly edit any page (but don't forget to copy them on Crowdin after translating it) *or* you can use Crowdin's interface directly.
+
+You can directly edit any page \(but don't forget to copy them on Crowdin after translating it\) _or_ you can use Crowdin's interface directly.
 
 The second option is the easiest for most people.
 
 ## Adding new pages
 
 1. Create the page in English or at least create an issue to ask someone to do it for you
-1. This page must have a name related to its content and should be named in the language you are translating into
-1. In the *source/LANGUAGE/index.rst* file, create a link to your new page
-1. In the *crowdin.yaml* file, create the information related to this new page now ready for translation
-1. Push the new page to Crowdin
+2. This page must have a name related to its content and should be named in the language you are translating into
+3. In the _source/LANGUAGE/index.rst_ file, create a link to your new page
+4. In the _crowdin.yaml_ file, create the information related to this new page now ready for translation
+5. Push the new page to Crowdin
 
 ## Adding a new language
 
-1. Create the new directory under *source/LANGUAGE*, where *LANGUAGE* is the locale code for the new language you want to add (see [this page](https://crowdin.com/page/api/language-codes) for the list of supported languages and their locale code on Crowdin)
-1. In the *crowdin.yaml* file add the new language for each translation (under *languages_mapping*)
-1. Set the language in conf.py (see the [language list](http://www.sphinx-doc.org/en/stable/config.html#confval-language))
-1. Push your translation to Crowdin
+1. Create the new directory under _source/LANGUAGE_, where _LANGUAGE_ is the locale code for the new language you want to add \(see [this page](https://crowdin.com/page/api/language-codes) for the list of supported languages and their locale code on Crowdin\)
+2. In the _crowdin.yaml_ file add the new language for each translation \(under _languages\_mapping_\)
+3. Set the language in conf.py \(see the [language list](http://www.sphinx-doc.org/en/stable/config.html#confval-language)\)
+4. Push your translation to Crowdin
 
-## Building the documentation
+## Building the documentation for the project :
 
 ### Usage
 
-	php builddoc
+```text
+php builddoc
+```
 
 Or you can also use
 
-	./builddoc
+```text
+./builddoc
+```
 
 ### Requirements
 
@@ -52,47 +127,68 @@ Or you can also use
 
 ### Building using Docker
 
-	SPHINXBUILD="docker run --rm -v $PWD:/doc umbrellium/sphinx-doc sphinx-build" ./builddoc html
+```text
+SPHINXBUILD="docker run --rm -v $PWD:/doc umbrellium/sphinx-doc sphinx-build" ./builddoc html
+```
 
 To clean the doc generated by docker use the following command
 
-	docker run --rm -v $PWD:/doc umbrellium/sphinx-doc rm -rf build/*
+```text
+docker run --rm -v $PWD:/doc umbrellium/sphinx-doc rm -rf build/*
+```
 
 ### Check for lint errors in code examples
 
 Install dependencies:
 
-	composer install
+```text
+composer install
+```
 
 Run rusy to check for code examples:
 
-	./vendor/bin/rusty check --no-execute source/ -v
+```text
+./vendor/bin/rusty check --no-execute source/ -v
+```
 
 ## FAQ
 
 ### Why Crowdin?
+
 [Crowdin](https://crowdin.com/project/atoum) helps seeing the progression of translations. It also has a good suggestion module created both from the already translated parts and from Bing Translator.
 
 ### Do we need to translate anchors?
+
 An anchor in the documentation is displayed as such:
 
-	.. _installation-par-composer:
+```text
+.. _installation-par-composer:
+```
 
 They must not be translated and remain the same as in the original translation. It will be easier for other people to translate other page referencing this anchor. Translations anchors would result in broken links when you switch language on the site.
 
 ### Where can I find the syntax for the files?
+
 We use the reStructuredText syntax. You can find it on the [sphinx website](http://sphinx-doc.org/rest.html).
 
 ### What are the title underline order?
-In reStructuredText syntax, you can use a wide variety of character to underline. The order use in the atoum documentation is : #, *, =, -, ", ^, `, :, ., ' . Now if you have more than 4 subdivisions you may want to split your document into multiple files.
+
+In reStructuredText syntax, you can use a wide variety of character to underline. The order use in the atoum documentation is : \#, \*, =, -, ", ^, \`, :, ., ' . Now if you have more than 4 subdivisions you may want to split your document into multiple files.
 
 ### What's the licence of this documentation.
-This documentation is under the CC by-nc-sa 4.0 licence. You can find more information on [this page](LICENCE.md)
+
+This documentation is under the CC by-nc-sa 4.0 licence. You can find more information on [this page](https://github.com/hasyshah/atoum-documentation/tree/bcc559d01c781c2d4aeacb10b11fa587cabae375/LICENCE.md)
 
 ### I have a problem, where can I find help?
-You can check our IRC channel [##atoum on freenode](https://webchat.freenode.net/?channels=##atoum)
+
+You can check our IRC channel [\#\#atoum on freenode](https://webchat.freenode.net/?channels=##atoum)
+
+To learn more about the freenode IRC network, the freenode \#live conference and other freenode projects head over to [our website.](https://freenode.net/)
 
 ### What thing should not be translated
+
 Some thing should not be translated
+
 * anchor/ref
 * directory name
+
